@@ -13,6 +13,8 @@
       --muted:#A7B5D3;
       --accent:#7DD3FC;
       --line:#1F2B44;
+      --good:#34D399;
+      --warn:#FBBF24;
     }
     *{box-sizing:border-box}
     body{
@@ -25,9 +27,9 @@
         linear-gradient(180deg, #050711, var(--bg));
     }
     header{
-      max-width:1100px;
+      max-width:1200px;
       margin:0 auto;
-      padding:36px 20px 22px;
+      padding:40px 20px 24px;
     }
     .kicker{
       font-size:12px;
@@ -37,29 +39,29 @@
       margin-bottom:10px;
     }
     h1{
-      font-size:28px;
+      font-size:30px;
       margin:0 0 12px;
       line-height:1.25;
     }
     .lead{
       color:#DCE7FF;
-      max-width:760px;
-      line-height:1.7;
+      max-width:860px;
+      line-height:1.8;
     }
 
     .wrap{
-      max-width:1100px;
+      max-width:1200px;
       margin:0 auto;
-      padding:0 20px 64px;
+      padding:0 20px 80px;
       display:grid;
-      gap:26px;
+      gap:28px;
     }
 
     .card{
-      background:rgba(14,21,36,.92);
+      background:rgba(14,21,36,.94);
       border:1px solid var(--line);
       border-radius:18px;
-      padding:20px;
+      padding:22px;
       box-shadow:0 20px 60px rgba(0,0,0,.35);
     }
 
@@ -67,20 +69,51 @@
       width:100%;
       border-radius:16px;
       background:#000;
+      margin-top:12px;
     }
 
     h2{
       margin:0 0 12px;
-      font-size:18px;
+      font-size:20px;
     }
-    p{
-      line-height:1.75;
-      margin:10px 0 0;
+    h3{
+      margin:18px 0 8px;
+      font-size:16px;
+    }
+    p, li{
+      line-height:1.8;
+      font-size:14px;
+    }
+    ul{
+      margin:8px 0 0 18px;
     }
     .muted{
       color:var(--muted);
       font-size:13px;
     }
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      font-size:12px;
+      color:var(--muted);
+      margin-right:6px;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:14px;
+      margin-top:12px;
+    }
+    .kpi div{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(11,18,32,.6);
+    }
+    .good{color:var(--good)}
+    .warn{color:var(--warn)}
   </style>
 </head>
 
@@ -92,49 +125,110 @@
   <p class="lead">
     身体の動きと音が、完全に同期する。<br>
     遅れも、ズレも感じないとき、人は「音を操作している」のではなく
-    <b>「自分が音になった」</b>と感じる。
+    <b>「自分が音になった」</b>と感じる。<br>
+    behaviour soundscape は、この一瞬の体験をプロダクトの核に据える。
   </p>
 </header>
 
 <main class="wrap">
 
-  <!-- ===== 動画①：コンセプト / 世界観 ===== -->
+  <!-- ================= 動画セクション ================= -->
+
   <section class="card">
     <h2>Concept</h2>
-    <video
-      class="video"
-      src="787616797.569025.mp4"
-      controls
-      playsinline
-      muted
-    ></video>
-    <p class="muted">
-      「私が音になる」瞬間を直感的に伝えるコンセプト映像。
-    </p>
+    <video class="video" src="787616797.569025.mp4" controls playsinline muted></video>
+    <p class="muted">世界観・思想を伝えるコンセプト映像。</p>
   </section>
 
-  <!-- ===== 動画②：操作・体験説明 ===== -->
   <section class="card">
     <h2>How it works</h2>
-    <video
-      class="video"
-      src="787508439.955715.mp4"
-      controls
-      playsinline
-      muted
-    ></video>
-    <p class="muted">
-      身体の動きと音がどのように対応しているかを示すデモ。
+    <video class="video" src="787508439.955715.mp4" controls playsinline muted></video>
+    <p class="muted">身体の動きと音の完全同期を示すデモ。</p>
+  </section>
+
+  <!-- ================= ディープリサーチ内容 ================= -->
+
+  <section class="card">
+    <h2>企画の一言定義</h2>
+    <p>
+      behaviour soundscape は、<b>0レイテンシ級で身体の動きと音が完全同期</b>することで、
+      「音を操作する」のではなく「自分が音になる」体験を提供する。
     </p>
   </section>
 
-  <!-- ===== 説明 ===== -->
   <section class="card">
-    <h2>Why behaviour soundscape</h2>
+    <h2>体験の核（絶対条件）</h2>
+    <span class="pill">レイテンシ</span>
+    <span class="pill">ジッタ</span>
+    <span class="pill">同期</span>
+
+    <ul>
+      <li>平均値ではなく <b>p95 / p99 レイテンシ</b>を基準に設計する</li>
+      <li>揺らぎ（ジッタ）は遅延以上に「ズレ」として知覚される</li>
+      <li>音・光・UIは同一タイムラインで制御する</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>なぜ今やるか（競合・トレンド）</h2>
+    <ul>
+      <li>MiMU Gloves：表現力は高いが学習コストが高い</li>
+      <li>Genki Wave：制作向けMIDI拡張が中心</li>
+      <li>Sony Motion Sonic：既存楽器の拡張</li>
+    </ul>
     <p>
-      本企画の核は <b>0レイテンシ級の完全同期</b>です。<br>
-      単に音が出るのではなく、動きの内部に音が存在していると感じられること。
-      その体験品質そのものを、プロダクトの競争軸に据えます。
+      既存製品は「演奏」や「制作」が主軸。<br>
+      behaviour soundscape は <b>誰でも成功する身体体験</b>に焦点を当てる。
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>絶対に負けないポイント</h2>
+    <ul>
+      <li>同期品質を数値で定義（p99レイテンシ・ジッタ）</li>
+      <li>初見30秒で成功するプリセット設計</li>
+      <li>展示・フィットネスなどB2B運用耐性</li>
+      <li>ハード×ソフト協調による後追い困難性</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>KPI（成功の定義）</h2>
+    <div class="kpi">
+      <div>
+        <b class="good">体感同期</b><br>
+        p99レイテンシ／ジッタ
+      </div>
+      <div>
+        <b class="good">初見成功率</b><br>
+        30秒以内
+      </div>
+      <div>
+        <b class="warn">継続率</b><br>
+        「もう一度やりたい」
+      </div>
+      <div>
+        <b class="good">共有率</b><br>
+        動画撮影・拡散
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>コモディティ化対策</h2>
+    <ul>
+      <li>「動き→音」ではなく「同期品質」をブランド化</li>
+      <li>体験テンプレ・演出パックの継続更新</li>
+      <li>シーン特化（展示／キッズ／フィットネス）</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>結論</h2>
+    <p>
+      behaviour soundscape の価値は機能ではなく<b>体験の完成度</b>にある。<br>
+      0レイテンシ級の完全同期が成立した瞬間、
+      プロダクトは模倣困難な「身体拡張体験」へと変わる。
     </p>
   </section>
 
