@@ -108,6 +108,35 @@
     /* 目次をスマホで畳めるようにする（任意だが便利） */
     details summary{cursor:pointer; font-weight:700;}
     details summary::-webkit-details-marker{display:none;}
+
+    /* ===== 追加：キャラクター表示用（今回追加分） ===== */
+    .charGrid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media(min-width:980px){
+      .charGrid{ grid-template-columns:1fr 1fr; }
+    }
+    .charItem{
+      margin:0;
+      border:1px solid var(--line);
+      background: rgba(11,18,32,.55);
+      border-radius:14px;
+      padding:10px;
+    }
+    .charItem img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:12px;
+      background:#000;
+    }
+    .charItem figcaption{
+      margin-top:8px;
+      text-align:center;
+    }
   </style>
 </head>
 
@@ -156,6 +185,28 @@
         <div class="video-hint">src: 787508439.955715.mp4（index.htmlと同じ階層）</div>
       </div>
     </div>
+  </section>
+
+  <!-- ===== 追加：キャラクター（今回追加分） ===== -->
+  <section class="card" id="character" style="margin-top:14px;">
+    <h2>イメージキャラクター</h2>
+    <div class="content">
+      “私が音になる” を視覚化する象徴。半導体（回路・素子・発光）を連想させる意匠で、<b>同期＝正確さ</b>と<b>身体性＝躍動</b>を同時に表現する。
+    </div>
+
+    <div class="charGrid">
+      <figure class="charItem">
+        <img src="assets/character_front.jpg" alt="イメージキャラクター（正面）" loading="lazy">
+        <figcaption class="muted">Front</figcaption>
+      </figure>
+
+      <figure class="charItem">
+        <img src="assets/character_back.jpg" alt="イメージキャラクター（背面）" loading="lazy">
+        <figcaption class="muted">Back</figcaption>
+      </figure>
+    </div>
+
+    <div class="footer">※ 画像ファイルは <code class="inline">assets/character_front.jpg</code> / <code class="inline">assets/character_back.jpg</code> を想定。</div>
   </section>
 
   <div class="grid">
@@ -464,4 +515,4 @@
   </div>
 </div>
 </body>
-            </html>
+</html>
