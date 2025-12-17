@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>behaviour soundscape：商品化に向けたディープリサーチ＆販売戦略（2025-12-17）</title>
+  <style>
+    :root {
+      --bg:#0b0f17; --card:#121a26; --text:#e9eef7; --muted:#9fb0c6; --accent:#7dd3fc;
+      --border:#223047; --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN","Noto Sans JP", "Yu Gothic", "Meiryo", Arial;
+    }
+    body { margin:0; font-family:var(--sans); background:linear-gradient(180deg,#070a10, var(--bg)); color:var(--text); }
+    header { padding:28px 18px 12px; max-width: 1100px; margin: 0 auto; }
+    h1 { margin:0 0 8px; font-size: 22px; letter-spacing: .2px; }
+    .subtitle { color:var(--muted); font-size: 13px; }
+    .wrap { max-width:1100px; margin:0 auto; padding: 0 18px 50px; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:14px; }
+    @media (min-width: 900px) { .grid { grid-template-columns: 340px 1fr; align-items:start; } }
+    .card { background:rgba(18,26,38,.92); border:1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .card h2 { margin: 0 0 10px; font-size: 16px; }
+    .content { line-height: 1.7; font-size: 14px; color: #e6eefb; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ol, ul { margin: 10px 0 0 18px; }
+    .muted { color: var(--muted); font-size: 12px; }
+    .kpi { font-family: var(--mono); font-size: 12px; color:#d6e2f5; background:#0b1220; border:1px solid var(--border); border-radius:10px; padding: 10px; }
+    .badge { display:inline-block; padding: 2px 8px; border-radius:999px; border:1px solid var(--border); color:var(--muted); font-size: 12px; margin-left: 6px; }
+    footer { margin-top: 12px; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>behaviour soundscape：商品化に向けたディープリサーチ＆販売戦略（2025-12-17）</h1>
+  <div class="subtitle">作成日：2025-12-17（JST） / 目的：類似製品トレンドを踏まえて、商品化ロードマップと販売戦略を組み立てる</div>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <aside class="card">
+      <h2>目次 <span class="badge">クリックで移動</span></h2>
+      <ol>
+        <li><a href="#sec1">0. エグゼクティブサマリー</a></li>
+<li><a href="#sec2">1. 市場スナップショット：近接カテゴリとトレンド</a></li>
+<li><a href="#sec3">2. 競合・類似製品：ポジショニング整理（要点）</a></li>
+<li><a href="#sec4">3. 想定ターゲットと刺さる“ジョブ”</a></li>
+<li><a href="#sec5">4. プロダクト戦略：MVP → スケールの設計</a></li>
+<li><a href="#sec6">5. 価格・ビジネスモデル案</a></li>
+<li><a href="#sec7">6. チャネル戦略（最短で検証できる順）</a></li>
+<li><a href="#sec8">7. リスクと回避策（重要）</a></li>
+<li><a href="#sec9">8. 次の具体アクション（2週間）</a></li>
+      </ol>
+      <div class="kpi" style="margin-top:12px;">
+        <b>推奨KPI（初期検証）</b><br/>
+        ・初見で“理解”までの時間：30秒以内<br/>
+        ・もう一回やりたい率：60%以上<br/>
+        ・撮って共有したい率：40%以上<br/>
+        ・体感遅延：ユーザーが違和感を感じない範囲（設計KPI）
+      </div>
+      <footer>
+        ※ 本ページは公開サイトではなく、HTMLファイルとして閲覧できます。<br/>
+        ※ 参照リンクは文末にまとめています。
+      </footer>
+    </aside>
+
+    <main style="display:grid; grid-template-columns:1fr; gap:14px;">
+      
+        <section id="sec1" class="card">
+          <h2>0. エグゼクティブサマリー</h2>
+          <div class="content">behaviour soundscape は「身体の動き → 音（＋光）」を直感的に結びつける体験型プロダクトとして、<br/>既存の“ジェスチャー/モーションで音を操る”市場（ウェアラブルMIDI、触覚メトロノーム、体験型センサー楽器、クリエイター向けコントローラ）と強い親和性があります。<br/>競合は「演奏・制作（DAW/MIDI）」「ライブ表現（パフォーマンス）」に寄った製品が多く、<br/>“非ミュージシャンでも1分で気持ちよく遊べる / 体験を共有できる”にフォーカスすると差別化しやすいです。<br/><br/>提案する勝ち筋は <b>二段階</b>：<br/>(1) **ソフト先行（アプリ/SDK）**で体験を磨き、利用データを獲得 → (2) **ハード（軽量ウェアラブル）**で完成度と没入感を上げてスケール。</div>
+        </section>
+        
+        <section id="sec2" class="card">
+          <h2>1. 市場スナップショット：近接カテゴリとトレンド</h2>
+          <div class="content">近接カテゴリは大きく4つあります。<br/><br/>1) <b>ウェアラブル・ジェスチャーで音を制御</b><br/>- 例：MiMU Gloves（手や指のジェスチャーで制御するウェアラブル）<br/>- 例：Genki Wave（リング型、ジェスチャーでMIDI制御）<br/>- 例：Sony Motion Sonic（手首/手の動きでエフェクトや音の体験を拡張）<br/><br/>2) **“触覚/光”でリズムや体験を補強するウェアラブル**<br/>- 例：Soundbrenner Pulse（振動でビートを感じるメトロノーム）<br/><br/>3) **“誰でも遊べる”音楽ガジェット（ジェスチャー含む）**<br/>- 例：Artiphon Orba 2（複数ジェスチャーで音を変えながら演奏・ループ）<br/><br/>4) **センサーで身の回りのモノ/動きを楽器化**<br/>- 例：Mogees（接触センサー＋アプリで物体を楽器化）<br/><br/>2025年の文脈では、AI/生成系の普及で「作るハードルが下がる」一方、<br/>“身体性（身体の動き）”を伴う表現が体験価値として再評価されています（モーション系楽器の話題化も継続）。</div>
+        </section>
+        
+        <section id="sec3" class="card">
+          <h2>2. 競合・類似製品：ポジショニング整理（要点）</h2>
+          <div class="content"><b>MiMU Gloves</b>：表現力は高いが学習コストも高い（プロ/アーティスト寄り）。<br/>**Genki Wave（リング）**：音やエフェクトを“追加”するコントローラとして強い（既存の制作環境前提）。<br/>**Sony Motion Sonic**：身体の動きと音をシンクロさせる体験を狙う点で近い（ウェアラブル＋アプリ）。<br/>**Soundbrenner Pulse**：音ではなく“触覚”でテンポ体験を提供（静音・練習ニーズに刺さる）。<br/>**Orba 2**：直感的で楽しいが「ガジェット止まり」になりやすい課題も指摘される（エクスポート/拡張性など）。<br/>**Mogees**：環境を楽器化できるが、用途は“音作り/実験”寄りになりやすい。<br/><br/>→ behaviour soundscape は、これらの間を埋める **“体験共有型（動画/イベント/家族）×身体性×音/光”** に寄せると独自性が出ます。</div>
+        </section>
+        
+        <section id="sec4" class="card">
+          <h2>3. 想定ターゲットと刺さる“ジョブ”</h2>
+          <div class="content">優先度順に、現実的に刺さりやすい順で並べます。<br/><br/>A) <b>体験コンテンツ/イベント領域（B2B2C）</b><br/>- 商業施設・展示・企業プロモで「体験 → SNS拡散」<br/>- “短時間で理解できる”が重要（初見ユーザーが多い）<br/><br/>B) **ダンス/フィットネス/ウェルネス（B2C or B2B）**<br/>- 動きに反応する音/光で、運動がゲーム化する<br/>- 自宅でも成立し、継続率を上げやすい（デイリー体験）<br/><br/>C) **教育（STEAM）・キッズ（B2C/B2B）**<br/>- 体を動かして音の仕組みを学べる（親子で遊べる）<br/>- “安全/壊れにくい/簡単”が必須<br/><br/>D) **クリエイター/音楽制作（プロシューマー）**<br/>- 既存のMIDI/DAW文化に乗れるが、競合も強い<br/>- ここは“後追いで拡張”が堅い（最初から主戦場にしない）</div>
+        </section>
+        
+        <section id="sec5" class="card">
+          <h2>4. プロダクト戦略：MVP → スケールの設計</h2>
+          <div class="content"><b>Phase 1（ソフト先行 / 8〜12週間で検証）</b><br/>- iOS/Androidアプリ：スマホIMUで「動き→音（＋画面内の光演出）」を実装<br/>- 3つの“鉄板体験”に絞る：<br/>  1) ビートに乗る（動くと音が鳴る）<br/>  2) 音色が変わる（速度/軌道/揺らぎで変調）<br/>  3) ループして重ねる（短時間で“作品っぽい”）<br/>- “撮ってすぐ共有”を最優先（テンプレ動画書き出し）<br/><br/>**Phase 2（軽量ウェアラブル / 没入感と差別化）**<br/>- 手首/足首クリップ or バンド型：IMU＋LED＋簡易ハプティクス<br/>- レイテンシと追従性を最重視（体感の気持ちよさが命）<br/>- B2B（イベント/施設）向けに複数台同期・運用機能を提供<br/><br/>**Phase 3（SDK/APIでエコシステム化）**<br/>- クリエイターが“自分の音/演出”を作れる拡張（プリセット配布/マーケット）</div>
+        </section>
+        
+        <section id="sec6" class="card">
+          <h2>5. 価格・ビジネスモデル案</h2>
+          <div class="content">おすすめは <b>B2B2C → B2C拡張</b>。<br/><br/>- **アプリ（無料＋課金）**：プリセット/演出パック、エクスポート、クラウド保存<br/>- **ハード（1〜2万円台）**：一般向けは心理的壁が低い帯域。プロ向けは上位モデルで。<br/>- **B2B（イベント/施設）**：月額（運用ツール、分析、台数同期、コンテンツ更新）＋導入費</div>
+        </section>
+        
+        <section id="sec7" class="card">
+          <h2>6. チャネル戦略（最短で検証できる順）</h2>
+          <div class="content">1) <b>TikTok/YouTube Shorts</b>：体験の理解が一瞬で伝わる（音×動き×光）<br/>2) **展示・イベント**：商業施設、クリエイターイベント、教育イベント<br/>3) **コラボ**：ダンサー/フィットネス系インフルエンサー、保育・教育系<br/>4) **楽器店/ガジェット店**：フェーズ2以降（試奏・体験が強い）</div>
+        </section>
+        
+        <section id="sec8" class="card">
+          <h2>7. リスクと回避策（重要）</h2>
+          <div class="content">- <b>“すごいけど続かない”問題</b>：Orba系のガジェットが抱えがち → 1日5分でも気持ちよく終われる体験設計（ループ・称賛・成長）<br/>- **学習コスト**：MiMUのように高いと市場が狭い → “初心者モード”をデフォルトに<br/>- **レイテンシ/同期ズレ**：没入を壊す最大要因 → 設計KPIに「体感遅延」を置く<br/>- **用途の散漫化**：ターゲットを最初に絞る（まずイベント or フィットネスのどちらか）</div>
+        </section>
+        
+        <section id="sec9" class="card">
+          <h2>8. 次の具体アクション（2週間）</h2>
+          <div class="content">- 体験仮説を3本に絞り、30〜60秒の“デモ動画”を作る（ショートムービー文脈と相性◎）<br/>- 5〜10人に“初見体験”をしてもらい、1)理解時間 2)楽しい瞬間 3)もう一回やりたいか を計測<br/>- B2B候補（施設/イベント会社）に3社ヒアリング：導入条件・安全・運用・価格感<br/>- 競合が“できていないこと”を差別化要件に落とす（共有、簡単、運用）</div>
+        </section>
+        
+      <section id="refs" class="card">
+        <h2>参考リンク（一次情報中心）</h2>
+        <ul>
+          <li><a href="https://www.mimugloves.com/">MiMU Gloves 公式サイト</a> <span class="muted">(turn0search1)</span></li>
+<li><a href="https://www.drakemusic.org/technology/instruments-projects/mi-mu-gloves/">MiMU Gloves（Drake Music 紹介）</a> <span class="muted">(turn0search10)</span></li>
+<li><a href="https://genkiinstruments.com/">Genki Instruments（Wave）</a> <span class="muted">(turn1search0)</span></li>
+<li><a href="https://www.soundbrenner.com/pages/genki-wave">Genki Wave（Soundbrenner紹介）</a> <span class="muted">(turn1search4)</span></li>
+<li><a href="https://www.sony.com/ja/SonyInfo/design/stories/motionsonic/">Sony Motion Sonic Project（Sony Design）</a> <span class="muted">(turn0search15)</span></li>
+<li><a href="https://av.watch.impress.co.jp/docs/news/1327302.html">MOTION SONIC（Indiegogo開始の報道）</a> <span class="muted">(turn0search27)</span></li>
+<li><a href="https://www.soundbrenner.com/pages/pulse">Soundbrenner Pulse 公式</a> <span class="muted">(turn1search3)</span></li>
+<li><a href="https://techcrunch.com/2022/05/31/artiphons-delightful-orba-handheld-synthesizer-gets-a-sequel/">Artiphon Orba 2（TechCrunch）</a> <span class="muted">(turn1search14)</span></li>
+<li><a href="https://www.wired.com/review/artiphon-orba-2">Artiphon Orba 2（WIRED review）</a> <span class="muted">(turn1news31)</span></li>
+<li><a href="https://techcrunch.com/2016/07/05/mogees-play-it-again-sam/">Mogees（TechCrunch）</a> <span class="muted">(turn1search5)</span></li>
+<li><a href="https://www.mdpi.com/2673-4591/118/1/27">学術：Hand Gesture to Sound（MDPI 2025）</a> <span class="muted">(turn0search9)</span></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12526951/">概観：Wireless IMUs in Performing Arts（PMC 2025）</a> <span class="muted">(turn0search16)</span></li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>
