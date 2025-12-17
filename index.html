@@ -7,198 +7,107 @@
 
   <style>
     :root{
-      --bg:#070A12;
-      --card:#0E1524;
-      --card2:#0B1220;
-      --text:#EAF0FF;
-      --muted:#A7B5D3;
-      --accent:#7DD3FC;
-      --accent2:#A78BFA;
-      --line:#1F2B44;
-      --good:#34D399;
-      --warn:#FBBF24;
-      --bad:#FB7185;
+      --bg:#070A12; --card:#0E1524; --text:#EAF0FF; --muted:#A7B5D3;
+      --accent:#7DD3FC; --accent2:#A78BFA; --line:#1F2B44;
+      --good:#34D399; --warn:#FBBF24; --bad:#FB7185;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic","Meiryo", Arial;
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
+      margin:0; font-family:var(--sans); color:var(--text);
       background:
         radial-gradient(900px 500px at 20% 0%, rgba(125,211,252,.18), transparent 60%),
         radial-gradient(800px 450px at 85% 10%, rgba(167,139,250,.16), transparent 60%),
         linear-gradient(180deg, #050711, var(--bg));
     }
     header{
-      max-width:1180px;
-      margin:0 auto;
-      padding:26px 18px 14px;
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:flex-end;
+      max-width:1180px; margin:0 auto; padding:26px 18px 14px;
+      display:flex; justify-content:space-between; gap:12px; align-items:flex-end;
     }
-    .brand{
-      display:flex; flex-direction:column; gap:6px;
-    }
-    .brand .title{
-      font-size:14px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
-    }
-    .brand .meta{
-      font-size:12px; color:var(--muted);
-    }
-    .cta{
-      display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
-    }
+    .brand{display:flex; flex-direction:column; gap:6px;}
+    .brand .title{font-size:14px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;}
+    .brand .meta{font-size:12px; color:var(--muted);}
+    .cta{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
     .chip{
-      border:1px solid var(--line);
-      background:rgba(14,21,36,.7);
-      border-radius:999px;
-      padding:8px 10px;
-      font-size:12px; color:var(--muted);
+      border:1px solid var(--line); background:rgba(14,21,36,.7);
+      border-radius:999px; padding:8px 10px; font-size:12px; color:var(--muted);
       backdrop-filter: blur(6px);
     }
     .wrap{max-width:1180px; margin:0 auto; padding: 0 18px 60px;}
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-    }
-    @media(min-width:980px){
-      .grid{grid-template-columns: 360px 1fr;}
-    }
+    .grid{display:grid; grid-template-columns: 1fr; gap:14px;}
+    @media(min-width:980px){.grid{grid-template-columns: 360px 1fr;}}
     .card{
-      background: rgba(14,21,36,.92);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
+      background: rgba(14,21,36,.92); border:1px solid var(--line);
+      border-radius:16px; padding:16px;
       box-shadow: 0 18px 60px rgba(0,0,0,.35);
     }
-    .card h2{
-      margin:0 0 10px;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
-    .content{
-      line-height:1.75;
-      font-size:14px;
-      color: #E6EEFF;
-    }
-    .muted{color:var(--muted); font-size:12px}
+    .card h2{margin:0 0 10px; font-size:16px; letter-spacing:.2px;}
+    .content{line-height:1.75; font-size:14px; color:#E6EEFF;}
+    .muted{color:var(--muted); font-size:12px;}
     a{color:var(--accent); text-decoration:none}
     a:hover{text-decoration:underline}
-    .sidebar{
-      position:sticky; top:10px;
-      display:flex; flex-direction:column; gap:14px;
+
+    /* ===== ここが“かぶり修正”の本体 =====
+       PCだけ sidebar を sticky にし、スマホでは static に戻す */
+    .sidebar{display:flex; flex-direction:column; gap:14px;}
+    @media(min-width:980px){
+      .sidebar{position:sticky; top:10px;}
     }
+    @media(max-width:979px){
+      .sidebar{position:static !important; top:auto !important;}
+    }
+
     .toc ol{margin:10px 0 0 18px}
     .toc li{margin: 6px 0}
     .kpiBox{
       background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(14,21,36,.7));
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
+      border:1px solid var(--line); border-radius:14px; padding:12px;
     }
     .kpiBox .row{display:flex; gap:10px; align-items:center; margin:6px 0}
     .dot{width:8px; height:8px; border-radius:99px; background:var(--good)}
     .dot.warn{background:var(--warn)}
     .dot.bad{background:var(--bad)}
+
     .hero{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-      padding:18px;
-      overflow:hidden;
-      position:relative;
+      display:grid; grid-template-columns:1fr; gap:14px; padding:18px; overflow:hidden; position:relative;
     }
-    @media(min-width:980px){
-      .hero{grid-template-columns: 1.1fr .9fr;}
-    }
+    @media(min-width:980px){.hero{grid-template-columns: 1.1fr .9fr;}}
     .hero:before{
-      content:"";
-      position:absolute; inset:-2px;
+      content:""; position:absolute; inset:-2px;
       background: radial-gradient(600px 300px at 10% 0%, rgba(125,211,252,.22), transparent 60%),
                   radial-gradient(520px 280px at 90% 20%, rgba(167,139,250,.18), transparent 65%);
       pointer-events:none;
     }
     .hero-left,.hero-right{position:relative}
-    .kicker{
-      font-size:12px; color:var(--muted);
-      letter-spacing:.18em; text-transform:uppercase;
-      margin-bottom:8px;
-    }
-    h1{
-      margin:0 0 10px;
-      font-size:24px;
-      line-height:1.2;
-    }
+    .kicker{font-size:12px; color:var(--muted); letter-spacing:.18em; text-transform:uppercase; margin-bottom:8px;}
+    h1{margin:0 0 10px; font-size:24px; line-height:1.2;}
     .accent{color:var(--accent)}
     .lead{color:#DCE7FF; margin: 0 0 12px}
     .pillrow{display:flex; gap:8px; flex-wrap:wrap}
     .pill{
-      font-size:12px;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(11,18,32,.65);
-      color: var(--muted);
+      font-size:12px; padding:7px 10px; border-radius:999px;
+      border:1px solid var(--line); background: rgba(11,18,32,.65); color: var(--muted);
     }
-    .video-card{
-      border:1px solid var(--line);
-      background: rgba(11,18,32,.55);
-      border-radius:14px;
-      padding:10px;
-    }
-    .video-title{
-      font-size:12px; color:var(--muted);
-      margin-bottom:8px;
-    }
-    .vid{
-      width:100%;
-      aspect-ratio: 16/9;
-      border-radius:12px;
-      background:#000;
-      display:block;
-    }
-    .video-hint{
-      margin-top:8px;
-      font-size:11px;
-      color:var(--muted);
-      font-family: var(--mono);
-    }
-    .grid2{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
-    }
-    @media(min-width:980px){
-      .grid2{grid-template-columns:1fr 1fr;}
-    }
-    .card-mini{
-      background: rgba(11,18,32,.6);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px;
-    }
+    .video-card{border:1px solid var(--line); background: rgba(11,18,32,.55); border-radius:14px; padding:10px;}
+    .video-title{font-size:12px; color:var(--muted); margin-bottom:8px;}
+    .vid{width:100%; aspect-ratio: 16/9; border-radius:12px; background:#000; display:block;}
+    .video-hint{margin-top:8px; font-size:11px; color:var(--muted); font-family: var(--mono);}
+    .grid2{display:grid; grid-template-columns:1fr; gap:12px;}
+    @media(min-width:980px){.grid2{grid-template-columns:1fr 1fr;}}
+    .card-mini{background: rgba(11,18,32,.6); border:1px solid var(--line); border-radius:14px; padding:12px;}
     .card-mini h3{margin:0 0 8px; font-size:14px}
     .card-mini ul{margin:0 0 0 18px}
     .refs{margin: 10px 0 0 18px}
     code.inline{
-      font-family:var(--mono);
-      font-size:12px;
-      background: rgba(11,18,32,.9);
-      border:1px solid var(--line);
-      padding: 2px 6px;
-      border-radius:8px;
-      color:#DCE7FF;
+      font-family:var(--mono); font-size:12px; background: rgba(11,18,32,.9);
+      border:1px solid var(--line); padding: 2px 6px; border-radius:8px; color:#DCE7FF;
     }
-    .footer{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:12px;
-    }
+    .footer{margin-top:14px; color:var(--muted); font-size:12px;}
+
+    /* 目次をスマホで畳めるようにする（任意だが便利） */
+    details summary{cursor:pointer; font-weight:700;}
+    details summary::-webkit-details-marker{display:none;}
   </style>
 </head>
 
@@ -217,7 +126,7 @@
 
 <div class="wrap">
 
-  <!-- ===================== HERO（動画2本：MP4直置き） ===================== -->
+  <!-- ===== HERO（YouTubeは完全撤去、MP4直置き） ===== -->
   <section class="hero card" id="hero">
     <div class="hero-left">
       <div class="kicker">企画書 / 開発者向け</div>
@@ -238,38 +147,45 @@
       <div class="video-card">
         <div class="video-title">イメージ動画①（世界観 / 30秒）</div>
         <video class="vid" src="787616797.569025.mp4" controls playsinline muted></video>
-        <div class="video-hint">src: 787616797.569025.mp4（index.htmlと同じ階層に配置）</div>
+        <div class="video-hint">src: 787616797.569025.mp4（index.htmlと同じ階層）</div>
       </div>
 
       <div class="video-card" style="margin-top:14px;">
         <div class="video-title">イメージ動画②（操作感 / 60秒）</div>
         <video class="vid" src="787508439.955715.mp4" controls playsinline muted></video>
-        <div class="video-hint">src: 787508439.955715.mp4（index.htmlと同じ階層に配置）</div>
+        <div class="video-hint">src: 787508439.955715.mp4（index.htmlと同じ階層）</div>
       </div>
     </div>
   </section>
 
   <div class="grid">
     <aside class="sidebar">
+
       <section class="card toc">
         <h2>目次</h2>
-        <ol>
-          <li><a href="#sec1">1. 一言で言うと</a></li>
-          <li><a href="#sec2">2. なぜ今やるか（トレンド/市場の空気）</a></li>
-          <li><a href="#sec3">3. 体験の核（プロダクト定義）</a></li>
-          <li><a href="#sec4">4. 成功のための非交渉条件（Non-negotiables）</a></li>
-          <li><a href="#sec5">5. レイテンシ予算（Latency Budget）の作り方</a></li>
-          <li><a href="#sec6">6. アーキテクチャ推奨（Phase別）</a></li>
-          <li><a href="#sec7">7. 動き→音マッピング（体験品質の設計原則）</a></li>
-          <li><a href="#sec8">8. 競合整理（何が違う？）</a></li>
-          <li><a href="#sec9">9. 絶対に負けない点（Defensibility）</a></li>
-          <li><a href="#sec10">10. コモディティ化（真似される）対策</a></li>
-          <li><a href="#sec11">11. 開発者が必ず押さえる実装論点（チェックリスト）</a></li>
-          <li><a href="#sec12">12. KPI（“成功”を定義する）</a></li>
-          <li><a href="#sec13">13. リスクと潰し込み</a></li>
-          <li><a href="#sec14">14. ロードマップ（提案）</a></li>
-          <li><a href="#sec15">15. 参考リンク（一次情報中心）</a></li>
-        </ol>
+
+        <!-- スマホで長い目次が邪魔なら畳める -->
+        <details open>
+          <summary>開く / 閉じる</summary>
+          <ol>
+            <li><a href="#sec1">1. 一言で言うと</a></li>
+            <li><a href="#sec2">2. なぜ今やるか（トレンド/市場の空気）</a></li>
+            <li><a href="#sec3">3. 体験の核（プロダクト定義）</a></li>
+            <li><a href="#sec4">4. 成功のための非交渉条件（Non-negotiables）</a></li>
+            <li><a href="#sec5">5. レイテンシ予算（Latency Budget）の作り方</a></li>
+            <li><a href="#sec6">6. アーキテクチャ推奨（Phase別）</a></li>
+            <li><a href="#sec7">7. 動き→音マッピング（体験品質の設計原則）</a></li>
+            <li><a href="#sec8">8. 競合整理（何が違う？）</a></li>
+            <li><a href="#sec9">9. 絶対に負けない点（Defensibility）</a></li>
+            <li><a href="#sec10">10. コモディティ化対策（真似される前提で勝つ）</a></li>
+            <li><a href="#sec11">11. 開発者が必ず押さえる実装論点（チェックリスト）</a></li>
+            <li><a href="#sec12">12. KPI（“成功”を定義する）</a></li>
+            <li><a href="#sec13">13. リスクと潰し込み</a></li>
+            <li><a href="#sec14">14. ロードマップ（提案）</a></li>
+            <li><a href="#sec15">15. 参考リンク（一次情報中心）</a></li>
+          </ol>
+        </details>
+
         <div class="footer">※ セクション1〜15が「ディープリサーチ企画書の本文」です。</div>
       </section>
 
@@ -279,13 +195,15 @@
           <div class="row"><span class="dot"></span><div><b>E2Eレイテンシ p99</b><div class="muted">“たまの遅れ”を潰す（体感0ms級の鍵）</div></div></div>
           <div class="row"><span class="dot warn"></span><div><b>ジッタ（揺らぎ）</b><div class="muted">平均が低くても揺れると“ズレ”に見える</div></div></div>
           <div class="row"><span class="dot"></span><div><b>初見30秒成功率</b><div class="muted">迷わず鳴らせる（プリセット設計）</div></div></div>
-          <div class="row"><span class="dot bad"></span><div><b>フレーム落ち/ドロップ</b><div class="muted">没入を破壊（劣化時は簡略化モードへ）</div></div></div>
+          <div class="row"><span class="dot bad"></span><div><b>ドロップ/復帰</b><div class="muted">劣化時も“体験が壊れない”設計へ</div></div></div>
         </div>
         <div class="footer">“0レイテンシ”は外向けには <code class="inline">体感0ms級</code>＋測定指標の併記が安全です。</div>
       </section>
     </aside>
 
     <main style="display:grid; grid-template-columns:1fr; gap:14px;">
+
+      <!-- ===== ここから下：前回の完全版本文を “削らず” そのまま踏襲 ===== -->
 
       <section id="sec1" class="card">
         <h2>1. 一言で言うと</h2>
@@ -313,6 +231,7 @@
           <b>Core Moment：</b>ユーザーが初見30秒で “私が音になった” を感じる瞬間<br/>
           <b>Core Loop：</b> ①動く→②音/光が一致→③気持ちいい→④もう一回→⑤共有（動画）<br/><br/>
           この“Core Moment”を壊す最大要因は <b>遅延・ズレ・揺らぎ</b> です。
+          研究でも、アクション‐サウンド遅延は評価を大きく落とし得ます（10msと20msの差など）。
         </div>
       </section>
 
@@ -321,7 +240,8 @@
         <div class="content">
           <b>(A) レイテンシ設計：平均ではなく“上位パーセンタイル”で守る</b><br/>
           - 目標：ユーザーが遅れを感じない範囲（<b>体感0ms級</b>）。<br/>
-          - 守るべきは <b>p95/p99</b>（たまの遅れ＝没入破壊）。<br/><br/>
+          - 守るべきは <b>p95/p99</b>（たまの遅れ＝没入破壊）。<br/>
+          - 研究では 0〜10msが近く評価され、20msは悪化する報告がある。<br/><br/>
           <b>(B) ジッタ（揺らぎ）最小化</b><br/>
           - 平均が低くても、フレーム落ち・無線遅延の揺れは“ズレ”として知覚される。<br/><br/>
           <b>(C) マルチモーダル整合</b><br/>
@@ -347,8 +267,9 @@
           <ul>
             <li>“平均値”ではなく <b>最大値の制御</b>（GC、バッファ膨張、無線干渉）</li>
             <li>オーディオは <b>リアルタイム優先スレッド</b>＋固定バッファ</li>
-            <li>BTは制約が強い（LEの接続間隔など）。プロトコル/接続方式の選択が勝敗を左右</li>
+            <li>BTは制約が強い（LEの接続間隔等）。プロトコル/接続方式の選択が勝敗を左右</li>
           </ul>
+          参考：Genki WaveはホストやBLE制約で 7–20ms と説明し、独自プロトコルで <1ms を謳うケースもある。
         </div>
       </section>
 
@@ -393,9 +314,8 @@
             <li><b>MiMU Gloves</b>：プロ向け表現力は高いが、学習コストが大きい</li>
             <li><b>Genki Wave</b>：MIDI/制作環境の拡張が中心（遅延は接続方式に依存）</li>
             <li><b>Sony Motion Sonic</b>：ジェスチャーで“エフェクト”を操る（既存楽器と組み合わせ）</li>
-            <li><b>Orba 2</b>：楽しいが“ガジェット止まり”になりやすい論点がある</li>
+            <li><b>Orba 2</b>：楽しいが“ガジェット止まり”の指摘や、プロ用途の制約が論点</li>
           </ul>
-
           <b>behaviour soundscapeの勝ち方</b>
           <ul>
             <li>対象を「ミュージシャン」ではなく <b>全員</b>に</li>
@@ -420,7 +340,7 @@
       </section>
 
       <section id="sec10" class="card">
-        <h2>10. コモディティ化（真似される）対策</h2>
+        <h2>10. コモディティ化対策（真似される前提で勝つ）</h2>
         <div class="content">
           コモディティ化は「動き→音」が一般化すると起きます。対策は <b>“体験の完成度”</b>を防波堤にすること。<br/><br/>
           <b>対策パッケージ</b>
@@ -430,7 +350,7 @@
             <li><b>共有テンプレ</b>：動画テンプレ/音パックで“見せ方”まで提供（拡散の型）</li>
             <li><b>プロ/パートナー</b>：ダンサー・ジム・施設と共同で“公式体験”を作る</li>
           </ul>
-          <span class="muted">※ 「最初は楽しいが続かない」系の批判が出やすい領域なので、継続体験の設計が必須。</span>
+          参考：即席音楽ガジェットは「最初は楽しいが続かない」批判が出やすい。継続体験（5分で気持ちよく終わる）を設計で潰す。
         </div>
       </section>
 
@@ -487,7 +407,6 @@
             <li>“私が音になった”実感スコア（簡易アンケート）</li>
             <li>もう一回やりたい率 / 共有したい率</li>
           </ul>
-
           <b>同期品質KPI（技術）</b>
           <ul>
             <li>E2Eレイテンシ：平均 / p95 / p99</li>
@@ -513,7 +432,7 @@
       <section id="sec14" class="card">
         <h2>14. ロードマップ（提案）</h2>
         <div class="content">
-          <b>0–8週：</b>スマホMVPで体験検証（動画撮影テンプレを含む）<br/>
+          <b>0–8週：</b>スマホMVPで体験検証（動画テンプレを含む）<br/>
           <b>2–4ヶ月：</b>ウェアラブル試作（低遅延リンク・LED同期）＋計測基盤<br/>
           <b>5–8ヶ月：</b>B2B PoC（展示/イベント）で運用要件を固める<br/>
           <b>9–12ヶ月：</b>量産設計/コンテンツパック/SDK準備
@@ -525,19 +444,24 @@
         <div class="content">
           <p class="muted">※ 競合・遅延知見・無線制約などの根拠リンク（社内向け）。</p>
           <ul class="refs">
-            <li><a href="https://www.soundbrenner.com/products/genki-wave-midi-ring">Genki Wave（レイテンシ言及）</a></li>
-            <li><a href="https://online.ucpress.edu/mp/article/36/1/109/92063/Action-sound-Latency-and-the-Perceived-Quality-of">Action-sound Latency 研究</a></li>
-            <li><a href="https://dl.acm.org/doi/fullHtml/10.1145/3678299.3678331">Audio latency（JND関連）</a></li>
-            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12526951/">Wireless IMUs in Performing Arts</a></li>
-            <li><a href="https://www.theverge.com/2021/5/28/22458023/sony-motion-sonic-launches-music-indiegogo-price-date">Sony Motion Sonic（報道）</a></li>
-            <li><a href="https://mimugloves.com/gloves/">MiMU Gloves（公式）</a></li>
-            <li><a href="https://www.hangar42.nl/wp-content/uploads/2017/10/BLE-MIDI-spec.pdf">BLE-MIDI spec（PDF）</a></li>
+            <li><a href="https://www.soundbrenner.com/products/genki-wave-midi-ring">Genki Wave FAQ（レイテンシ 7–20ms / 独自プロトコル <1ms 言及）</a></li>
+            <li><a href="https://online.ucpress.edu/mp/article/36/1/109/92063/Action-sound-Latency-and-the-Perceived-Quality-of">Action-sound Latency（10msは許容、20msは不評の研究）</a></li>
+            <li><a href="https://dl.acm.org/doi/fullHtml/10.1145/3678299.3678331">Audio latency JND（0/10msと20msの評価差など）</a></li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12526951/">Wireless IMUs in Performing Arts（サンプルレート/低遅延要件）</a></li>
+            <li><a href="https://www.theverge.com/2021/5/28/22458023/sony-motion-sonic-launches-music-indiegogo-price-date">Sony Motion Sonic（ジェスチャーでエフェクト制御）</a></li>
+            <li><a href="https://mimugloves.com/gloves/">MiMU Gloves 公式（ジェスチャー→サウンドの代表例）</a></li>
+            <li><a href="https://www.wired.com/review/artiphon-orba-2">Orba 2 review（ガジェット止まりの論点）</a></li>
+            <li><a href="https://www.lifewire.com/instant-gratification-music-gadgets-can-disappoint-7563340">Instant-gratification music gadgets批評（継続体験の落とし穴）</a></li>
+            <li><a href="https://www.hangar42.nl/wp-content/uploads/2017/10/BLE-MIDI-spec.pdf">BLE-MIDI spec（接続間隔等の制約）</a></li>
+            <li><a href="https://www.reddit.com/r/embedded/comments/11hy57v/minimum_achievable_latency_with_bluetooth_classic/">BLE connection interval最小7.5ms（議論）</a></li>
           </ul>
         </div>
       </section>
+
+      <!-- ===== ここまで：完全版本文（削除なし） ===== -->
 
     </main>
   </div>
 </div>
 </body>
-</html>
+            </html>
