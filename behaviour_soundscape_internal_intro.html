@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Behaviour Soundscape｜社内向け紹介</title>
+  <meta name="description" content="Behaviour Soundscape（0レイテンシ完全同期：私が音になる）社内向け紹介ページ。何がすごい？何が新しい？を3分で。">
+  <meta name="theme-color" content="#0b1220" />
+  <style>
+    :root{
+      --bg:#070b12;
+      --text:#eaf1ff;
+      --muted:rgba(234,241,255,.72);
+      --muted2:rgba(234,241,255,.56);
+      --card:rgba(255,255,255,.06);
+      --card2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.12);
+      --accent:#39f7a1;
+      --accent2:#66c6ff;
+      --shadow: 0 22px 70px rgba(0,0,0,.55);
+      --r:18px;
+      --r2:26px;
+      --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", "Noto Sans JP", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 15% 10%, rgba(57,247,161,.18), transparent 55%),
+        radial-gradient(900px 650px at 85% 18%, rgba(102,198,255,.14), transparent 55%),
+        radial-gradient(900px 900px at 55% 120%, rgba(57,247,161,.10), transparent 60%),
+        linear-gradient(180deg, #070b12 0%, #050811 55%, #04060d 100%);
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:1080px; margin:0 auto; padding:0 18px}
+    header{
+      position:sticky; top:0; z-index:40;
+      backdrop-filter:saturate(160%) blur(16px);
+      background:linear-gradient(180deg, rgba(7,11,18,.80) 0%, rgba(7,11,18,.30) 100%);
+      border-bottom:1px solid var(--line);
+    }
+    .top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0;}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(57,247,161,.95), rgba(57,247,161,.28) 55%, transparent 60%),
+        radial-gradient(circle at 75% 70%, rgba(102,198,255,.55), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 10px 26px rgba(0,0,0,.45);
+    }
+    .brand .name{font-weight:900; letter-spacing:.2px}
+    .brand .meta{font-size:12px; color:var(--muted2)}
+    nav{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    nav a{text-decoration:none; font-size:13px; color:var(--muted); padding:8px 10px; border-radius:12px; border:1px solid transparent;}
+    nav a:hover{border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.04); color:var(--text)}
+    @media (max-width:920px){nav{display:none}}
+    .hero{padding:34px 0 14px}
+    .heroCard{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r2);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .heroCard::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 420px at 0% 0%, rgba(57,247,161,.22), transparent 60%),
+        radial-gradient(900px 420px at 100% 100%, rgba(102,198,255,.14), transparent 60%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    .heroInner{position:relative; padding:22px}
+    .kicker{display:inline-flex; align-items:center; gap:10px; padding:7px 10px; border-radius:999px; border:1px solid rgba(57,247,161,.28); background:rgba(57,247,161,.06); color:var(--muted); font-size:12px;}
+    .dot{width:8px; height:8px; border-radius:99px; background:var(--accent); box-shadow:0 0 0 6px rgba(57,247,161,.12)}
+    h1{margin:14px 0 10px; font-size:40px; line-height:1.07; letter-spacing:-.02em}
+    @media (max-width:520px){h1{font-size:30px}}
+    .lead{margin:0; color:var(--muted); font-size:15px; line-height:1.8; max-width:78ch}
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:10px 14px; border-radius:14px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); text-decoration:none; font-weight:800;}
+    .btn:hover{background:rgba(255,255,255,.08)}
+    .btn.primary{border-color:rgba(57,247,161,.40); background:linear-gradient(135deg, rgba(57,247,161,.22), rgba(102,198,255,.10));}
+    .btn.primary:hover{border-color:rgba(57,247,161,.62)}
+    .pillRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+    .pill{font-family:var(--mono); font-size:11px; color:rgba(234,241,255,.72); border:1px solid rgba(255,255,255,.12); padding:6px 8px; border-radius:999px; background:rgba(255,255,255,.03); white-space:nowrap;}
+    .section{padding:18px 0}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card); border:1px solid var(--line); border-radius:var(--r2); box-shadow:0 18px 60px rgba(0,0,0,.35); overflow:hidden;}
+    .pad{padding:18px}
+    h2{margin:0; font-size:20px; letter-spacing:-.01em}
+    .sub{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.7}
+    .tiles{display:grid; grid-template-columns:repeat(12,1fr); gap:12px; margin-top:12px}
+    .tile{grid-column:span 4; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04); border-radius:var(--r); padding:14px; position:relative; overflow:hidden; min-height:124px;}
+    .tile::before{content:""; position:absolute; inset:-2px; background:radial-gradient(420px 220px at 15% 0%, rgba(57,247,161,.18), transparent 60%), radial-gradient(420px 220px at 85% 110%, rgba(102,198,255,.12), transparent 60%); opacity:.55; pointer-events:none;}
+    .tile>*{position:relative}
+    .tile h3{margin:0 0 6px; font-size:15px}
+    .tile p{margin:0; color:var(--muted); font-size:13px; line-height:1.75}
+    @media (max-width:920px){.tile{grid-column:span 6}}
+    @media (max-width:520px){.tile{grid-column:span 12}}
+    .list{margin:12px 0 0; padding:0; list-style:none; display:grid; gap:10px}
+    .list li{display:flex; gap:10px; align-items:flex-start; color:var(--muted); font-size:13px; line-height:1.75}
+    .icon{width:18px; height:18px; border-radius:6px; border:1px solid rgba(57,247,161,.35); background:rgba(57,247,161,.12); display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto; margin-top:2px;}
+    .icon svg{width:12px; height:12px; fill:var(--accent)}
+    .quote{margin-top:12px; padding:14px; border:1px solid rgba(255,255,255,.14); border-radius:var(--r); background:linear-gradient(135deg, rgba(57,247,161,.08), rgba(102,198,255,.05)); color:var(--muted); font-size:13px; line-height:1.85;}
+    .quote b{color:var(--text)}
+    .mini{font-size:12px; color:var(--muted2); margin-top:10px; border-top:1px solid rgba(255,255,255,.10); padding-top:10px;}
+    footer{padding:26px 0 44px; border-top:1px solid rgba(255,255,255,.12); color:var(--muted2); font-size:12px; line-height:1.75;}
+    .anchor{scroll-margin-top:86px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="name">Behaviour Soundscape｜社内向け紹介</div>
+          <div class="meta">最短3分でわかる：何がすごい？何が新しい？（2025-12-18）</div>
+        </div>
+      </div>
+      <nav aria-label="目次">
+        <a href="#what">これは何？</a>
+        <a href="#wow">何がすごい？</a>
+        <a href="#new">何が新しい？</a>
+        <a href="#use">使いどころ</a>
+        <a href="#next">次にやること</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="hero">
+  <div class="wrap">
+    <section class="heroCard">
+      <div class="heroInner">
+        <div class="kicker"><span class="dot"></span><span>体験の核：0レイテンシで身体の動きと音が完全同期</span></div>
+        <h1>動いた瞬間、<br/>音が返る。だから、誰でも“演奏者”になる。</h1>
+        <p class="lead">
+          <b>Behaviour Soundscape</b> は、身体の動きをリアルタイムに音へ変換し、
+          <b>遅れを感じないレベル</b>で音を返す体験プロダクトです。<br/>
+          キーワードは「<b>私が音になる</b>」。楽器経験がなくても、動きだけで“音楽的な気持ちよさ”に入れます。
+        </p>
+
+        <div class="ctaRow">
+          <a class="btn primary" href="#wow">すごさを見る →</a>
+          <a class="btn" href="#use">使いどころ →</a>
+          <a class="btn" href="#next">次にやること →</a>
+        </div>
+
+        <div class="pillRow" aria-label="一言要点">
+          <span class="pill">0‑latency sync</span>
+          <span class="pill">body → sound</span>
+          <span class="pill">learn-free</span>
+          <span class="pill">shareable</span>
+          <span class="pill">brandable</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<section id="what" class="section anchor">
+  <div class="wrap">
+    <div class="grid">
+      <div class="card pad">
+        <h2>これは何？（超ざっくり）</h2>
+        <p class="sub">
+          <b>「身体の動きが、そのまま音になる」</b>体験です。<br/>
+          手や腕、足、体の動きをセンサーで捉えて、音（ドラム、ベース、シンセなど）に変換します。
+        </p>
+
+        <div class="tiles" style="margin-top:12px">
+          <div class="tile">
+            <h3>誰でも</h3>
+            <p>楽器ができなくてもOK。<br/>“動ける”が才能になる。</p>
+          </div>
+          <div class="tile">
+            <h3>すぐに</h3>
+            <p>セットしたら即プレイ。<br/>説明より先に体験できる。</p>
+          </div>
+          <div class="tile">
+            <h3>伝わる</h3>
+            <p>動画/デモで一発理解。<br/>「動き→音」の因果が見える。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card pad">
+        <h2>一言でいうと</h2>
+        <p class="sub">
+          ダンスでもない、楽器でもない。<br/>
+          その中間にある、新しい“身体演奏”の入口です。
+        </p>
+
+        <div class="quote">
+          <b>キャッチ</b><br/>
+          「うまく踊れない」でもいい。<br/>
+          「楽器が難しい」でもいい。<br/>
+          <b>“動いたこと”が、そのまま音楽になる</b>。
+        </div>
+
+        <div class="mini">
+          ※ 社内向けの説明のため、技術詳細や実装方式はここでは省略しています。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wow" class="section anchor">
+  <div class="wrap">
+    <div class="card pad">
+      <h2>何がすごい？（3つだけ）</h2>
+      <p class="sub">難しい話なしで、体験の強さに直結するポイントだけ。</p>
+
+      <div class="tiles">
+        <div class="tile">
+          <h3>① “遅れない”が快感</h3>
+          <p>
+            動いた瞬間に音が返ると、脳が「自分が音を出している」と感じやすい。<br/>
+            ここが“没入”のスイッチになります。
+          </p>
+        </div>
+        <div class="tile">
+          <h3>② 上達の壁を超える</h3>
+          <p>
+            楽器は練習が必要。ダンスもそう。<br/>
+            でもこれは「動いたら鳴る」ので、最初から“成功体験”が作れます。
+          </p>
+        </div>
+        <div class="tile">
+          <h3>③ 体験が拡散しやすい</h3>
+          <p>
+            見てすぐ分かる（動き＝音）。<br/>
+            デモが強いプロダクトは、社内外で話題化しやすい。
+          </p>
+        </div>
+      </div>
+
+      <div class="quote" style="margin-top:12px">
+        <b>要点</b><br/>
+        すごさの本体は「音の種類」ではなく、<b>“同期の気持ちよさ”</b>です。<br/>
+        だから、見た目や曲を変えても価値が残りやすい。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="new" class="section anchor">
+  <div class="wrap">
+    <div class="grid">
+      <div class="card pad">
+        <h2>何が新しい？</h2>
+        <p class="sub">
+          “動きで鳴らす”は昔からアイデアはあります。<br/>
+          でも、一般の人が「気持ちいい」「続けたい」と思うには、違いが必要です。
+        </p>
+
+        <ul class="list">
+          <li>
+            <span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span>
+            <span><b>同期の“質”を主役にする：</b>「変換できる」より「気持ちいい」を最優先に。</span>
+          </li>
+          <li>
+            <span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span>
+            <span><b>学習コストを限りなくゼロへ：</b>説明より先に体が理解する設計に。</span>
+          </li>
+          <li>
+            <span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span>
+            <span><b>“私が音になる”という一貫した世界観：</b>体験の言語化が明確なので、伝播が速い。</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card pad">
+        <h2>たとえると…</h2>
+        <p class="sub">社内で共有しやすい言い回しを用意しました。</p>
+
+        <div class="tiles" style="margin-top:12px">
+          <div class="tile">
+            <h3>楽器の“入口”が変わる</h3>
+            <p>指先ではなく、全身から入る音楽体験。</p>
+          </div>
+          <div class="tile">
+            <h3>ダンスの“見た目”より音</h3>
+            <p>上手さではなく、身体のノリが価値になる。</p>
+          </div>
+          <div class="tile">
+            <h3>ゲームっぽいのに創作</h3>
+            <p>遊びながら、自分の音を作れる。</p>
+          </div>
+        </div>
+
+        <div class="mini">
+          社内紹介では「できること全部」より、<b>“同期の気持ちよさ”</b>に話題を寄せるのが効果的です。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="use" class="section anchor">
+  <div class="wrap">
+    <div class="card pad">
+      <h2>どこで使える？（社内的に想像しやすい用途）</h2>
+      <p class="sub">まずは“強い体験”が必要な場所から。あとから広げられます。</p>
+
+      <div class="tiles">
+        <div class="tile">
+          <h3>展示・体験ブース</h3>
+          <p>短時間で「すごい」が伝わる。<br/>列ができるタイプの体験。</p>
+        </div>
+        <div class="tile">
+          <h3>社内イベント/採用</h3>
+          <p>説明しなくても盛り上がる。<br/>写真・動画のネタになる。</p>
+        </div>
+        <div class="tile">
+          <h3>教育/リハビリ/運動</h3>
+          <p>動機づけ（やる気）を音で作れる。<br/>“続く”設計と相性が良い。</p>
+        </div>
+      </div>
+
+      <div class="quote" style="margin-top:12px">
+        <b>最初のおすすめ</b><br/>
+        ①展示で刺さる体験にする → ②社内で「一度触った人」を増やす → ③用途アイデアを集めて絞る。<br/>
+        体験プロダクトは、机上で決めるより「触った人の声」が強いです。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="next" class="section anchor">
+  <div class="wrap">
+    <div class="card pad">
+      <h2>次にやること（社内公開後のアクション）</h2>
+      <p class="sub">社内公開ページの目的は「興味を引く」こと。次の一手が大事です。</p>
+
+      <div class="grid" style="margin-top:12px">
+        <div class="card" style="background:rgba(255,255,255,.04); border-radius:var(--r2); border:1px solid rgba(255,255,255,.14);">
+          <div class="pad">
+            <h2 style="font-size:16px">集めたい反応（3つ）</h2>
+            <ul class="list">
+              <li><span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span><span>「一回やってみたい」</span></li>
+              <li><span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span><span>「この部署/用途で使えそう」</span></li>
+              <li><span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span><span>「ここが不安（遅延/音/安全/場面）」</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="background:rgba(255,255,255,.04); border-radius:var(--r2); border:1px solid rgba(255,255,255,.14);">
+          <div class="pad">
+            <h2 style="font-size:16px">すぐできる改善（例）</h2>
+            <ul class="list">
+              <li><span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span><span>社内デモ会（10分×数回）を設定</span></li>
+              <li><span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span><span>用途アイデアをフォームで回収</span></li>
+              <li><span class="icon"><svg viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l1.4-1.4 3 3 8-8 1.4 1.4z"/></svg></span><span>「同期が気持ちいい」瞬間を言語化</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote" style="margin-top:12px">
+        <b>社内公開ページのゴール</b><br/>
+        “理解してもらう”より先に、<b>「触ってみたい」を作る</b>こと。<br/>
+        その後のデモで、同期の気持ちよさを体感してもらえれば勝ちです。
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>Behaviour Soundscape｜社内向け紹介</b> — generated 2025-12-18</div>
+    <div class="mini">
+      ※ 本ページは社内共有用の「興味喚起」版です。技術詳細、価格、スケジュール、競合比較などは別資料に分離するのが読みやすいです。
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if(!id || id === '#') return;
+      const el = document.querySelector(id);
+      if(!el) return;
+      e.preventDefault();
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+      history.pushState(null, '', id);
+    });
+  });
+</script>
+</body>
+</html>
