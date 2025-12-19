@@ -1,1 +1,718 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>behaviour soundscape | 2か月 技術検討＋プロト最適案（複数候補）</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1622;
+      --panel2:#121b2a;
+      --text:#e9eef7;
+      --muted:#9fb0c7;
+      --line:rgba(255,255,255,.08);
+      --good:#3ee28f;
+      --warn:#ffcc66;
+      --bad:#ff5c7a;
+      --accent:#7CFF72;
+      --accent2:#7cf7ff;
+      --shadow: 0 18px 40px rgba(0,0,0,.45);
+      --r:16px;
+      --r2:22px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 20% -10%, rgba(124,255,114,.12), transparent 60%),
+        radial-gradient(900px 700px at 90% 10%, rgba(124,247,255,.10), transparent 55%),
+        var(--bg);
+    }
+    header{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background: rgba(11,15,20,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1220px; margin:0 auto;
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(124,255,114,.95), rgba(124,247,255,.55));
+      box-shadow: 0 10px 28px rgba(124,255,114,.22);
+    }
+    h1{margin:0; font-size:14px; font-weight:800; letter-spacing:.5px;}
+    .sub{display:block; margin-top:3px; color:var(--muted); font-size:12px; font-weight:600;}
+    .controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    select, button{
+      font:inherit;
+      color:var(--text);
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    select{min-width:340px;}
+    button{cursor:pointer; transition:.2s transform,.2s background,.2s border-color; user-select:none;}
+    button:hover{transform:translateY(-1px); border-color: rgba(124,255,114,.35); background: rgba(124,255,114,.10);}
+    button.primary{border-color: rgba(124,255,114,.38); background: rgba(124,255,114,.16);}
+    main{max-width:1220px; margin:0 auto; padding:16px;}
+    .grid{display:grid; gap:14px;}
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .title{font-weight:900; font-size:13px; letter-spacing:.4px;}
+    .meta{font-family:var(--mono); font-size:11px; color:var(--muted);}
+    .cardBody{padding:16px;}
+    .pillRow{display:flex; gap:8px; flex-wrap:wrap;}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.25);box-shadow:0 0 0 3px rgba(255,255,255,.04)}
+    .dot.good{background:var(--good); box-shadow:0 0 0 3px rgba(62,226,143,.10)}
+    .dot.warn{background:var(--warn); box-shadow:0 0 0 3px rgba(255,204,102,.10)}
+    .dot.bad{background:var(--bad); box-shadow:0 0 0 3px rgba(255,92,122,.10)}
+    .note{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius:14px;
+      padding:10px 12px;
+      color: rgba(233,238,247,.92);
+      line-height:1.45;
+      font-size:12px;
+    }
+    .split{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px;}
+    @media (max-width: 980px){ .split{grid-template-columns:1fr;} select{min-width: 240px;} }
+    .mono{font-family:var(--mono);}
+    .list{display:flex; flex-direction:column; gap:10px;}
+    .row{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.02);
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .badge{
+      width:38px; height:38px; border-radius:14px;
+      background: rgba(124,255,114,.16);
+      border:1px solid rgba(124,255,114,.25);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900;
+    }
+    .h{font-weight:900;}
+    .p{margin-top:4px; color:var(--muted); font-size:12px; line-height:1.4;}
+    .kv{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    .kv .item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .k{font-size:11px; color:var(--muted);}
+    .v{margin-top:6px; font-weight:900; font-size:13px;}
+    .v small{font-weight:700; color:var(--muted);}
+    .tabs{display:flex; gap:8px; flex-wrap:wrap;}
+    .tab{
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      cursor:pointer;
+      user-select:none;
+      font-size:12px;
+      transition:.2s border-color, .2s background;
+    }
+    .tab.active{border-color: rgba(124,255,114,.35); background: rgba(124,255,114,.10); color: rgba(233,238,247,.95);}
+    .concept{display:none;}
+    .concept.active{display:block;}
+    .journey{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 980px){ .journey{grid-template-columns:1fr;}}
+    .step{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: rgba(255,255,255,.02);
+      padding:12px;
+      min-height:120px;
+      position:relative;
+      overflow:hidden;
+    }
+    .step:before{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 20%, rgba(124,255,114,.12), transparent 55%);
+      opacity:.8;
+      pointer-events:none;
+    }
+    .step .s{position:relative; font-size:11px; color:var(--muted); font-family:var(--mono);}
+    .step .t{position:relative; margin-top:6px; font-weight:900; font-size:13px;}
+    .step .d{position:relative; margin-top:6px; font-size:12px; color:var(--muted); line-height:1.35;}
+    .risk{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 980px){ .risk{grid-template-columns:1fr;}}
+    .risk .item{border:1px solid var(--line); border-radius:14px; padding:12px; background:rgba(255,255,255,.02);}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      font-size:11px;
+      color: var(--muted);
+    }
+    footer{
+      max-width:1220px;
+      margin:0 auto;
+      padding:14px 16px 26px;
+      color: rgba(159,176,199,.9);
+      font-size:12px;
+    }
+    .ok{color:rgba(233,238,247,.92)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>behaviour soundscape <span class="sub">2か月で「技術検討 + 体験プロト」を最適化する複数案（デバイス構成＋導線）</span></h1>
+      </div>
+    </div>
+    <div class="controls">
+      <select id="viewSelect" aria-label="view selector">
+        <option value="overview">Overview — 最適解の比較（まずここ）</option>
+        <option value="C1">Candidate 1 — アーケード筐体 / 3分体験（最優先）</option>
+        <option value="C2">Candidate 2 — 家庭版 / TV・スマホで成立（将来性の筋）</option>
+        <option value="C3">Candidate 3 — イベント展示 / ステージ型（映え特化）</option>
+        <option value="C4">Candidate 4 — 上位体験 / mocopi拡張（差別化）</option>
+      </select>
+      <button class="primary" id="btnPrint">Print-friendly</button>
+      <button id="btnReset">Reset UI</button>
+    </div>
+  </div>
+</header>
 
+<main class="grid">
+
+  <!-- OVERVIEW -->
+  <section class="concept active" id="overview">
+    <div class="card">
+      <div class="cardHeader">
+        <div class="title">結論：2か月で最も勝ち筋が高いのは「筐体型（Candidate 1）」</div>
+        <div class="meta">目的：VC/第三者に “説明なしで体験が成立”</div>
+      </div>
+      <div class="cardBody">
+        <div class="pillRow" style="margin-bottom:10px;">
+          <div class="pill"><span class="dot good"></span> 2か月達成確度：C1が最強</div>
+          <div class="pill"><span class="dot warn"></span> C2/C3は“将来の筋”として同時提示が有効</div>
+          <div class="pill"><span class="dot warn"></span> mocopiは“上位互換”扱いが綺麗（C4）</div>
+        </div>
+        <div class="note">
+          2か月の最適化は「機能の完成」ではなく <b>“導線の完成（動機→開始→没入→終了→持ち帰り）”</b>です。<br/>
+          全候補に共通して、<b>遅延と破綻ゼロ</b>が最優先。スコア/勝敗/ランキングは入れません（比較が生まれ価値が落ちます）。
+        </div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <div class="cardHeader">
+          <div class="title">候補比較（2か月での“最適”の意味）</div>
+          <div class="meta">PoC成功条件：3分触らせたら5分離れない</div>
+        </div>
+        <div class="cardBody">
+          <div class="list">
+            <div class="row">
+              <div class="badge">C1</div>
+              <div>
+                <div class="h">アーケード筐体 / 3分体験（最優先）</div>
+                <div class="p">“コイン/ボタン→足位置→即セッション→作品カード(QR)”の導線が強い。<b>説明不要でVCに刺さる</b>。</div>
+                <div class="pillRow" style="margin-top:8px;">
+                  <span class="tag">入力：ToF + RGB</span>
+                  <span class="tag">制御：Spresense(任意)</span>
+                  <span class="tag">出力：モニター + スピーカー + LED</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="badge">C2</div>
+              <div>
+                <div class="h">家庭版 / TV・スマホ</div>
+                <div class="p">購入・継続の筋を作る。2か月では“完全”より <b>縮小版の成立</b>を見せるのが目的。</div>
+                <div class="pillRow" style="margin-top:8px;">
+                  <span class="tag">入力：RGB(スマホ) / ToF(任意)</span>
+                  <span class="tag">出力：TV + スピーカー</span>
+                  <span class="tag">UI：ワンタップ3分</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="badge">C3</div>
+              <div>
+                <div class="h">イベント展示 / ステージ型</div>
+                <div class="p">映え・観客受け。VCが“市場性”を感じやすい。<b>キュー（台本）設計</b>が鍵。</div>
+                <div class="pillRow" style="margin-top:8px;">
+                  <span class="tag">入力：ToF中心</span>
+                  <span class="tag">制御：Spresense→照明キュー</span>
+                  <span class="tag">出力：スクリーン + PA + 照明</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="badge">C4</div>
+              <div>
+                <div class="h">上位体験 / mocopi拡張</div>
+                <div class="p">非装着が基本。mocopiは“ハンコン/プロ機材”扱いで差別化。<b>繊細な音</b>を追加。</div>
+                <div class="pillRow" style="margin-top:8px;">
+                  <span class="tag">入力：mocopi + (ToF/RGB)</span>
+                  <span class="tag">価値：精細さ / デモ強化</span>
+                  <span class="tag">リスク：装着の手間</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top:12px;">
+            <b>推奨戦略：</b>「C1を作り切る」＋「C2/C3を“同じコアで展開できる”と示す」＋「C4で差別化の余白を見せる」。<br/>
+            実装は“共通コア”（動き→音→光の同期）を一つにして、導線と筐体だけ変えるのが最短です。
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardHeader">
+          <div class="title">2か月ロードマップ（全候補共通）</div>
+          <div class="meta">W1〜W8</div>
+        </div>
+        <div class="cardBody">
+          <div class="list">
+            <div class="row"><div class="badge">W1</div><div><div class="h">計測と出力の骨格</div><div class="p">ToF/RGBの入力設計・遅延計測・出力（音/LED）を最短で繋ぐ。</div></div></div>
+            <div class="row"><div class="badge">W2</div><div><div class="h">破綻しないマッピング</div><div class="p">動きが雑でも音が成立する“補正（量子化/スムージング）”。</div></div></div>
+            <div class="row"><div class="badge">W3</div><div><div class="h">3分台本（フェーズ）</div><div class="p">30秒×6で盛り上がる。失敗なし。観客にも分かる変化。</div></div></div>
+            <div class="row"><div class="badge">W4</div><div><div class="h">導線UI（開始→終了→作品）</div><div class="p">コイン/ボタン→立ち位置→開始→終わり→QR（持ち帰り）を完成。</div></div></div>
+            <div class="row"><div class="badge">W5</div><div><div class="h">筐体/展示の物理試作</div><div class="p">見た目は60%でOK。操作の儀式（開始）が気持ち良いこと。</div></div></div>
+            <div class="row"><div class="badge">W6</div><div><div class="h">社内/友人で10人テスト</div><div class="p">“説明なしで開始できるか”と“3分後に笑うか”だけ見る。</div></div></div>
+            <div class="row"><div class="badge">W7</div><div><div class="h">安定化（遅延/落ちない）</div><div class="p">クラッシュ、音切れ、センサー不調を潰す。演出は落としてもOK。</div></div></div>
+            <div class="row"><div class="badge">W8</div><div><div class="h">VCデモ台本＋撮影</div><div class="p">あなた→VC→作品カードの順。3分の“儀式”を確立。</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C1 -->
+  <section class="concept" id="C1">
+    <div class="card">
+      <div class="cardHeader">
+        <div class="title">Candidate 1：アーケード筐体型（最優先）</div>
+        <div class="meta">コイン/ボタン → 立つ → 3分 → 作品カード(QR)</div>
+      </div>
+      <div class="cardBody">
+        <div class="journey">
+          <div class="step">
+            <div class="s">MOTIVE</div>
+            <div class="t">「何これ？」で引き寄せ</div>
+            <div class="d">待機中に“動き→音→光”のデモループ。観客が足を止める。</div>
+          </div>
+          <div class="step">
+            <div class="s">START</div>
+            <div class="t">コイン/物理ボタン</div>
+            <div class="d">“開始の儀式”を作る。説明は1行：「踏んで、動いて、音になる」</div>
+          </div>
+          <div class="step">
+            <div class="s">POSITION</div>
+            <div class="t">足マークに立つ</div>
+            <div class="d">ToFで距離ガイド。合ったらLEDが緑に。</div>
+          </div>
+          <div class="step">
+            <div class="s">EXPERIENCE</div>
+            <div class="t">3分セッション</div>
+            <div class="d">30秒ごとに層追加。失敗なし。動くほど“気持ちいい”。</div>
+          </div>
+          <div class="step">
+            <div class="s">TAKEAWAY</div>
+            <div class="t">作品カード + QR</div>
+            <div class="d">“今日の音”が残る。VCにはここが刺さる（UGC/IPの筋）。</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="split">
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">デバイス構成（2か月で最適）</div>
+              <div class="meta">安定×最短</div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="item"><div class="k">入力（必須）</div><div class="v">ToF + RGB <small>（位置/距離/動き量＋補助）</small></div></div>
+                <div class="item"><div class="k">制御（推奨）</div><div class="v">Spresense <small>（開始ボタン/LED/照明トリガ）</small></div></div>
+                <div class="item"><div class="k">出力（必須）</div><div class="v">モニター + スピーカー <small>（音は最重要）</small></div></div>
+                <div class="item"><div class="k">出力（強化）</div><div class="v">LEDバー/ライト <small>（DMX/簡易でもOK）</small></div></div>
+              </div>
+              <div class="note" style="margin-top:10px;">
+                <b>要点：</b>ToFを“筐体の足位置センサー”として使うと、ユーザー導線が崩れません。RGBだけだと環境でブレやすい。<br/>
+                Spresenseは「開始の儀式」と「光の同期」の物理I/Oとして最短で効きます。
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">2か月で作り込む範囲（C1）</div>
+              <div class="meta">Must / Should / Won’t</div>
+            </div>
+            <div class="cardBody">
+              <div class="list">
+                <div class="row">
+                  <div class="badge">M</div>
+                  <div>
+                    <div class="h">Must</div>
+                    <div class="p">開始導線（コイン/ボタン→足位置）／遅延監視／3分台本（層追加）／作品カード（QRはダミーでもOK）</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="badge">S</div>
+                  <div>
+                    <div class="h">Should</div>
+                    <div class="p">観客向けHUD（今何が鳴ってるか）／ライト連動（強すぎない）／“止まっても成立する”補正</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="badge">W</div>
+                  <div>
+                    <div class="h">Won’t</div>
+                    <div class="p">ランキング／精度スコア／複雑な設定画面／複数キャラ育成／ストーリー分岐</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="note" style="margin-top:10px;">
+                <b>プロト合格条件：</b>「説明しなくても開始できる」「動くと気持ちいい」「終わりに“作品”が残る」—この3点だけで十分です。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card" style="box-shadow:none;">
+          <div class="cardHeader">
+            <div class="title">主要リスクと潰し方（C1）</div>
+            <div class="meta">技術検討ポイント</div>
+          </div>
+          <div class="cardBody">
+            <div class="risk">
+              <div class="item">
+                <div class="h">遅延（音と光のズレ）</div>
+                <div class="p">UIで常時表示。遅延が増えたら演出を自動で落とす（層・FX削減）。</div>
+              </div>
+              <div class="item">
+                <div class="h">環境差（暗所/逆光/狭さ）</div>
+                <div class="p">ToF中心の導線にする。RGBは補助に回す。</div>
+              </div>
+              <div class="item">
+                <div class="h">ユーザーが動かない</div>
+                <div class="p">開始30秒は“合わせに来る”音（オート成立）。動くと層が増えるだけにする。</div>
+              </div>
+              <div class="item">
+                <div class="h">説明が必要になる</div>
+                <div class="p">UI説明は1行に固定。「立つ→動く→音になる」。残りは体験で理解させる。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C2 -->
+  <section class="concept" id="C2">
+    <div class="card">
+      <div class="cardHeader">
+        <div class="title">Candidate 2：家庭版（TV/スマホ）— 将来の市場性を同時に示す</div>
+        <div class="meta">2か月では「縮小版が成立する」を証明</div>
+      </div>
+      <div class="cardBody">
+        <div class="journey">
+          <div class="step"><div class="s">MOTIVE</div><div class="t">家族で3分遊ぶ</div><div class="d">子ども/親子の“週末導線”。運動をゲーム化しない（比較しない）。</div></div>
+          <div class="step"><div class="s">START</div><div class="t">ワンタップ</div><div class="d">アプリ起動→「今日の3分」。説明は短く。</div></div>
+          <div class="step"><div class="s">SETUP</div><div class="t">置くだけ</div><div class="d">スマホをTV前に置く。距離ガイド表示（ToFがあれば精度UP）。</div></div>
+          <div class="step"><div class="s">EXPERIENCE</div><div class="t">家のリビングで成立</div><div class="d">音はTV/外部スピーカー。光は画面中心でOK（過度な演出不要）。</div></div>
+          <div class="step"><div class="s">TAKEAWAY</div><div class="t">家族の“作品”が残る</div><div class="d">スコアではなく“今日の音のカード”を保存（思い出）。</div></div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="split">
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">デバイス構成（現実解）</div>
+              <div class="meta">最小→安定の2段</div>
+            </div>
+            <div class="cardBody">
+              <div class="list">
+                <div class="row">
+                  <div class="badge">A</div>
+                  <div>
+                    <div class="h">最小構成（2か月で確実）</div>
+                    <div class="p">スマホRGBのみ + TV（/スピーカー）。環境でブレるが「成立」の証明は可能。</div>
+                    <div class="pillRow" style="margin-top:8px;">
+                      <span class="tag">入力：RGB（スマホ）</span><span class="tag">出力：TV/スピーカー</span><span class="tag">導線：置くだけ</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="badge">B</div>
+                  <div>
+                    <div class="h">安定構成（説得力UP）</div>
+                    <div class="p">ToFを追加（小型モジュール/筐体側でも可）。距離・位置が安定し、体験が崩れない。</div>
+                    <div class="pillRow" style="margin-top:8px;">
+                      <span class="tag">入力：ToF + RGB</span><span class="tag">安定：暗所に強い</span><span class="tag">UX：立ち位置ガイド</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="note" style="margin-top:10px;">
+                <b>2か月での狙い：</b>家庭版を“作り込む”より、C1のコアをそのままスケールダウンして「展開できる」ことを見せるのが最適です。
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">C1と共通にする“コア”</div>
+              <div class="meta">実装を二重にしない</div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="item"><div class="k">共通コア</div><div class="v">動き→音→光（同期）</div></div>
+                <div class="item"><div class="k">導線差分</div><div class="v">開始儀式（家庭：ワンタップ）</div></div>
+                <div class="item"><div class="k">出力差分</div><div class="v">ライト→画面演出に縮小</div></div>
+                <div class="item"><div class="k">保存</div><div class="v">作品カードは同じ形式</div></div>
+              </div>
+              <div class="note" style="margin-top:10px;">
+                家庭版の価値は“継続”。ただし2か月で継続機能（アカウント等）まで作る必要はありません。<b>作品カード</b>があれば十分です。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- C3 -->
+  <section class="concept" id="C3">
+    <div class="card">
+      <div class="cardHeader">
+        <div class="title">Candidate 3：イベント展示 / ステージ型（映え＆観客理解）</div>
+        <div class="meta">“台本（キュー）”で確実に盛り上げる</div>
+      </div>
+      <div class="cardBody">
+        <div class="journey">
+          <div class="step"><div class="s">MOTIVE</div><div class="t">演者になれる</div><div class="d">観客が見る前提。映像/照明で引く。</div></div>
+          <div class="step"><div class="s">START</div><div class="t">MCの1行 + 開始</div><div class="d">「あなたの動きが音になる」だけ。説明はしない。</div></div>
+          <div class="step"><div class="s">POSITION</div><div class="t">センターマーク</div><div class="d">ToFで位置を固定し、照明が追従。</div></div>
+          <div class="step"><div class="s">EXPERIENCE</div><div class="t">キュー進行（30秒×6）</div><div class="d">照明/音/映像を同期して盛り上げを保証。</div></div>
+          <div class="step"><div class="s">TAKEAWAY</div><div class="t">観客→SNSへ</div><div class="d">作品カード（QR）+ 短いリプレイが強い。</div></div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="split">
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">デバイス構成（イベント最適）</div>
+              <div class="meta">ToF中心で安定</div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="item"><div class="k">入力</div><div class="v">ToF <small>（距離/動き量/位置）</small></div></div>
+                <div class="item"><div class="k">補助</div><div class="v">RGB <small>（ジェスチャ/方向）</small></div></div>
+                <div class="item"><div class="k">制御</div><div class="v">Spresense <small>（照明キュー/開始トリガ）</small></div></div>
+                <div class="item"><div class="k">出力</div><div class="v">PA + 照明 + スクリーン</div></div>
+              </div>
+
+              <div class="note" style="margin-top:10px;">
+                <b>2か月での最適化：</b>本格DMXでなくても、Spresense→LEDバー程度で“キュー”を作れます。重要なのは<b>進行が保証される</b>ことです。
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">最短の“台本（キュー）”例</div>
+              <div class="meta">30秒×6</div>
+            </div>
+            <div class="cardBody">
+              <div class="list">
+                <div class="row"><div class="badge">0:30</div><div><div class="h">Dawn</div><div class="p">音が合わせに来る。動かなくても成立。</div></div></div>
+                <div class="row"><div class="badge">1:00</div><div><div class="h">Flow</div><div class="p">動き量に応じて層追加（でも破綻しない）。</div></div></div>
+                <div class="row"><div class="badge">1:30</div><div><div class="h">Groove</div><div class="p">観客が分かる変化（ライト/画面が“広がる”）。</div></div></div>
+                <div class="row"><div class="badge">2:00</div><div><div class="h">Surge</div><div class="p">大きい動きをすると“気持ちいい音”が出る。</div></div></div>
+                <div class="row"><div class="badge">2:30</div><div><div class="h">Peak</div><div class="p">盛り上がり保証（自動で上げる）。</div></div></div>
+                <div class="row"><div class="badge">3:00</div><div><div class="h">Resolve</div><div class="p">フェードアウト→作品カード表示（拍手が起きる）。</div></div></div>
+              </div>
+              <div class="note" style="margin-top:10px;">
+                これをC1にも流用できます。<b>台本は共通資産</b>です。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- C4 -->
+  <section class="concept" id="C4">
+    <div class="card">
+      <div class="cardHeader">
+        <div class="title">Candidate 4：mocopi拡張（上位体験）— “高級ハンコン”枠</div>
+        <div class="meta">基本は非装着。mocopiは“プロモード”として追加</div>
+      </div>
+      <div class="cardBody">
+        <div class="journey">
+          <div class="step"><div class="s">MOTIVE</div><div class="t">もっと繊細に音を出したい</div><div class="d">上級者/クリエイター/デモ強化向け。</div></div>
+          <div class="step"><div class="s">START</div><div class="t">プロモード選択</div><div class="d">通常モードからの“オプション”で入る。</div></div>
+          <div class="step"><div class="s">SETUP</div><div class="t">装着（最短）</div><div class="d">装着は手間。2か月では“短時間で付けられる導線”を優先。</div></div>
+          <div class="step"><div class="s">EXPERIENCE</div><div class="t">手足のニュアンスが音になる</div><div class="d">通常にはない“細密レイヤー”を追加して差別化。</div></div>
+          <div class="step"><div class="s">TAKEAWAY</div><div class="t">作品の完成度が上がる</div><div class="d">作品カードに「Pro take」タグを付与。</div></div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="split">
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">デバイス構成（差別化最短）</div>
+              <div class="meta">“上位互換”の位置づけ</div>
+            </div>
+            <div class="cardBody">
+              <div class="kv">
+                <div class="item"><div class="k">入力（通常）</div><div class="v">ToF + RGB</div></div>
+                <div class="item"><div class="k">入力（プロ）</div><div class="v">mocopi <small>+ ToF/RGB(補助)</small></div></div>
+                <div class="item"><div class="k">差分の価値</div><div class="v">“繊細な音の追加”</div></div>
+                <div class="item"><div class="k">2か月の制約</div><div class="v">装着UXは簡素でOK</div></div>
+              </div>
+
+              <div class="note" style="margin-top:10px;">
+                mocopiを“必須”にすると導線が崩れます。<b>通常→プロ</b>の順にし、通常体験が最強であることが前提です。
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none;">
+            <div class="cardHeader">
+              <div class="title">2か月で入れるべき“プロ差分”</div>
+              <div class="meta">最小で効く</div>
+            </div>
+            <div class="cardBody">
+              <div class="list">
+                <div class="row">
+                  <div class="badge">1</div>
+                  <div>
+                    <div class="h">手首/足首 → 繊細なパーカッション</div>
+                    <div class="p">通常は大きい動き中心。プロでは“細かい揺れ”を音にする。</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="badge">2</div>
+                  <div>
+                    <div class="h">ポーズ → 音色切替</div>
+                    <div class="p">特定ポーズで“楽器が変わる”演出（ルール説明不要な範囲で）。</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="badge">3</div>
+                  <div>
+                    <div class="h">作品カードに“Pro take”</div>
+                    <div class="p">差別化が一目で伝わる。VCに「拡張余地」が見える。</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="note" style="margin-top:10px;">
+                ここまでで十分です。mocopiのフル活用（高精度IK等）は“次フェーズ”に回した方が2か月の成功確率が上がります。
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="note">
+    <span class="ok"><b>このHTMLが示すもの：</b>「ユーザーの動機→開始導線→体験→持ち帰り」＋「それを成立させるデバイス構成」＋「2か月で作り込む範囲と技術検討ポイント」</span><br/>
+    次の作業として、この中の<b>Candidate 1</b>を「待機→決済→立ち位置→キャリブ→セッション→作品カード」まで<b>画面遷移つきUIモック</b>に落とすのが最短です（同じコアでC2/C3に展開できます）。
+  </div>
+</footer>
+
+<script>
+  const select = document.getElementById("viewSelect");
+  const btnReset = document.getElementById("btnReset");
+  const btnPrint = document.getElementById("btnPrint");
+  const views = ["overview","C1","C2","C3","C4"].reduce((acc,id)=>{
+    acc[id]=document.getElementById(id); return acc;
+  },{});
+
+  function show(id){
+    Object.values(views).forEach(v=>v.classList.remove("active"));
+    views[id].classList.add("active");
+    select.value = id;
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  select.addEventListener("change", ()=> show(select.value));
+  btnReset.addEventListener("click", ()=> show("overview"));
+  btnPrint.addEventListener("click", ()=> window.print());
+
+  // default
+  show("overview");
+</script>
+</body>
+</html>
