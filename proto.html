@@ -1,1 +1,1083 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>behaviour soundscape - UI Prototypes (Multi Concepts)</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1622;
+      --panel2:#121b2a;
+      --text:#e9eef7;
+      --muted:#9fb0c7;
+      --line:rgba(255,255,255,.08);
+      --good:#3ee28f;
+      --warn:#ffcc66;
+      --bad:#ff5c7a;
+      --accent:#7CFF72; /* 明るい緑寄り（仮） */
+      --accent2:#7cf7ff;
+      --shadow: 0 18px 40px rgba(0,0,0,.45);
+      --radius: 16px;
+      --radius2: 22px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: radial-gradient(1100px 700px at 20% -10%, rgba(124,255,114,.12), transparent 60%),
+                  radial-gradient(900px 700px at 90% 10%, rgba(124,247,255,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      font-family:var(--sans);
+      letter-spacing:.2px;
+    }
 
+    /* App Shell */
+    .shell{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    header{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background: rgba(11,15,20,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .topbar{
+      max-width:1200px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(124,255,114,.95), rgba(124,247,255,.55));
+      box-shadow: 0 10px 28px rgba(124,255,114,.22);
+    }
+    .brand h1{
+      margin:0;
+      font-size:14px;
+      font-weight:700;
+      letter-spacing:.6px;
+    }
+    .brand .sub{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:500;
+      margin-top:2px;
+    }
+
+    .controls{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    select,button{
+      font:inherit;
+      color:var(--text);
+      background: rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+    select{ min-width:240px; }
+    button{
+      cursor:pointer;
+      transition:.2s transform, .2s background, .2s border-color;
+      user-select:none;
+    }
+    button:hover{
+      transform: translateY(-1px);
+      border-color: rgba(124,255,114,.35);
+      background: rgba(124,255,114,.10);
+    }
+    button.primary{
+      border-color: rgba(124,255,114,.38);
+      background: rgba(124,255,114,.16);
+    }
+    button.ghost{
+      background: transparent;
+    }
+
+    main{
+      flex:1;
+      max-width:1200px;
+      width:100%;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .cardHeader .title{
+      font-weight:700;
+      font-size:13px;
+      letter-spacing:.4px;
+    }
+    .cardHeader .meta{
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .cardBody{ padding:16px; }
+
+    .pillRow{ display:flex; gap:8px; flex-wrap:wrap; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:99px;
+      background: rgba(255,255,255,.25);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.04);
+    }
+    .dot.good{ background: var(--good); box-shadow: 0 0 0 3px rgba(62,226,143,.10); }
+    .dot.warn{ background: var(--warn); box-shadow: 0 0 0 3px rgba(255,204,102,.10); }
+    .dot.bad { background: var(--bad);  box-shadow: 0 0 0 3px rgba(255,92,122,.10); }
+
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .kv .item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .kv .k{ font-size:11px; color:var(--muted); }
+    .kv .v{ margin-top:6px; font-weight:700; font-size:14px; }
+    .kv .v small{ font-weight:600; color:var(--muted); }
+
+    /* Common modules */
+    .stage{
+      border-radius: var(--radius2);
+      border:1px solid var(--line);
+      background:
+        radial-gradient(700px 320px at 50% 30%, rgba(124,255,114,.14), transparent 55%),
+        radial-gradient(700px 320px at 50% 80%, rgba(124,247,255,.10), transparent 55%),
+        rgba(255,255,255,.02);
+      min-height: 360px;
+      position:relative;
+      overflow:hidden;
+    }
+    .stage .hint{
+      position:absolute; left:16px; bottom:16px;
+      font-size:12px; color:rgba(233,238,247,.78);
+      background: rgba(11,15,20,.35);
+      border:1px solid rgba(255,255,255,.10);
+      padding:10px 12px;
+      border-radius:14px;
+      max-width:min(520px, 92%);
+    }
+    .stage .centerTag{
+      position:absolute; left:50%; top:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      pointer-events:none;
+    }
+    .stage .centerTag .big{
+      font-size:18px; font-weight:800; letter-spacing:.6px;
+    }
+    .stage .centerTag .small{
+      margin-top:6px;
+      font-size:12px; color:rgba(159,176,199,.9);
+    }
+    .pulse{
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 50% 50%, rgba(124,255,114,.22), transparent 55%);
+      animation: pulse 4.2s ease-in-out infinite;
+      filter: blur(2px);
+      opacity:.65;
+    }
+    @keyframes pulse{ 0%,100%{ transform:scale(.92);} 50%{ transform:scale(1.03);} }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .toolbar .left, .toolbar .right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+    .meter{
+      height:10px; width:240px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      overflow:hidden;
+      background: rgba(255,255,255,.03);
+    }
+    .meter > div{
+      height:100%;
+      width: 42%;
+      background: linear-gradient(90deg, rgba(124,255,114,.9), rgba(124,247,255,.55));
+    }
+
+    .list{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .row{
+      display:flex; gap:12px; align-items:flex-start;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,.02);
+    }
+    .row .badge{
+      width:38px;height:38px;border-radius:14px;
+      background: rgba(124,255,114,.16);
+      border:1px solid rgba(124,255,114,.25);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800;
+    }
+    .row .txt .h{ font-weight:800; }
+    .row .txt .p{ margin-top:4px; font-size:12px; color:var(--muted); line-height:1.35; }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .split{ grid-template-columns: 1fr; }
+      select{ min-width: 180px; }
+      .meter{ width: 180px; }
+    }
+
+    /* Concept containers */
+    .concept{ display:none; }
+    .concept.active{ display:block; }
+
+    /* Concept B: HUD overlay */
+    .hudWrap{ position:relative; }
+    .hud{
+      position:absolute; inset:0;
+      pointer-events:none;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:14px;
+    }
+    .hudTop, .hudBottom{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .hudBox{
+      pointer-events:auto;
+      background: rgba(11,15,20,.38);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:10px 12px;
+      display:flex; align-items:center; gap:10px;
+      font-size:12px;
+      color:rgba(233,238,247,.9);
+      backdrop-filter: blur(10px);
+    }
+    .mini{
+      font-family:var(--mono);
+      font-size:11px;
+      color:rgba(159,176,199,.95);
+    }
+
+    /* Concept C: Coach character panel */
+    .coach{
+      display:flex; gap:14px; align-items:stretch;
+    }
+    .avatar{
+      width:88px; min-width:88px;
+      border-radius:22px;
+      border:1px solid rgba(124,255,114,.25);
+      background:
+        radial-gradient(60px 60px at 40% 30%, rgba(124,255,114,.35), transparent 60%),
+        radial-gradient(70px 70px at 60% 70%, rgba(124,247,255,.20), transparent 60%),
+        rgba(255,255,255,.03);
+      box-shadow: 0 18px 40px rgba(124,255,114,.10);
+      position:relative;
+      overflow:hidden;
+    }
+    .avatar:after{
+      content:"";
+      position:absolute; inset:-35%;
+      background: radial-gradient(circle at 50% 50%, rgba(124,255,114,.22), transparent 55%);
+      animation: pulse 3.6s ease-in-out infinite;
+      opacity:.75;
+    }
+    .coachTalk{
+      flex:1;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      border-radius:18px;
+      padding:12px;
+    }
+    .coachTalk .say{
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .coachTalk .sub{
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+
+    /* Concept D: Kiosk / Exhibition */
+    .kiosk{
+      display:grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .kiosk{ grid-template-columns: 1fr; }
+    }
+    .bigBtn{
+      width:100%;
+      padding:18px 16px;
+      border-radius:18px;
+      border:1px solid rgba(124,255,114,.35);
+      background: rgba(124,255,114,.14);
+      font-weight:900;
+      font-size:16px;
+      letter-spacing:.8px;
+      cursor:pointer;
+    }
+    .bigBtn:hover{ background: rgba(124,255,114,.20); }
+    .qr{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:14px;
+      background: rgba(255,255,255,.02);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .qr code{ font-family:var(--mono); color:rgba(233,238,247,.85); }
+    footer{
+      max-width:1200px; margin:0 auto;
+      padding:14px 18px 22px;
+      color:rgba(159,176,199,.9);
+      font-size:12px;
+    }
+    .note{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+      border-radius:14px;
+      padding:10px 12px;
+      line-height:1.35;
+    }
+    .mono{ font-family:var(--mono); }
+  </style>
+</head>
+
+<body>
+<div class="shell">
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>behaviour soundscape <span class="sub">UI composition prototypes (no backend)</span></h1>
+        </div>
+      </div>
+
+      <div class="controls">
+        <select id="conceptSelect" aria-label="UI concept selector">
+          <option value="A">Concept A — Minimal Jam (最短で気持ちいい)</option>
+          <option value="B">Concept B — HUD Arcade (ゲームっぽいがスコア無し)</option>
+          <option value="C">Concept C — Character Coach (IPキャラ同伴)</option>
+          <option value="D">Concept D — Kiosk / Pitch (VC体験用・展示用)</option>
+        </select>
+        <button class="primary" id="btnSim">Simulate Sensor Tick</button>
+        <button class="ghost" id="btnReset">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Shared status -->
+    <div class="card" style="margin-bottom:14px;">
+      <div class="cardHeader">
+        <div class="title">Device & Sensor Status (ダミー)</div>
+        <div class="meta" id="timeMeta">—</div>
+      </div>
+      <div class="cardBody">
+        <div class="pillRow" style="margin-bottom:12px;">
+          <div class="pill"><span class="dot" id="dotRGB"></span> RGB Camera <span class="mono" id="rgbText">DISCONNECTED</span></div>
+          <div class="pill"><span class="dot" id="dotToF"></span> ToF <span class="mono" id="tofText">DISCONNECTED</span></div>
+          <div class="pill"><span class="dot" id="dotSp"></span> Spresense <span class="mono" id="spText">DISCONNECTED</span></div>
+          <div class="pill"><span class="dot" id="dotMo"></span> mocopi <span class="mono" id="moText">OFF</span></div>
+        </div>
+
+        <div class="kv">
+          <div class="item">
+            <div class="k">Latency budget (UI target)</div>
+            <div class="v"><span id="latency">—</span> <small>ms</small></div>
+          </div>
+          <div class="item">
+            <div class="k">Motion confidence</div>
+            <div class="v"><span id="conf">—</span> <small>%</small></div>
+          </div>
+          <div class="item">
+            <div class="k">Detected mode (auto)</div>
+            <div class="v"><span id="mode">—</span></div>
+          </div>
+          <div class="item">
+            <div class="k">Session timer</div>
+            <div class="v"><span id="timer">00:00</span></div>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:12px;">
+          実装フック例：<span class="mono">window.onSensorFrame(frame)</span> に RGB/ToF/mocopi の推定結果（骨格、深度、動き量など）を渡す想定。
+          Spresense は <span class="mono">WebSerial / WebUSB / BLE</span> 等でイベント入力（加速度・IMU・ボタン）にも対応可能。
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept A -->
+    <section class="concept active" id="conceptA">
+      <div class="split">
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">A / Stage (体験の中心)</div>
+            <div class="meta">“Startだけ”で成立</div>
+          </div>
+          <div class="cardBody">
+            <div class="toolbar">
+              <div class="left">
+                <button class="primary" id="aStart">START</button>
+                <button id="aStop">STOP</button>
+                <button class="ghost" id="aCalib">CALIBRATE</button>
+              </div>
+              <div class="right">
+                <div class="pill"><span class="dot good"></span> Auto-quantize <span class="mono">ON</span></div>
+                <div class="pill"><span class="dot warn"></span> Visual FX <span class="mono">LOW</span></div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="stage">
+              <div class="pulse" aria-hidden="true"></div>
+              <div class="centerTag">
+                <div class="big">Move to make sound.</div>
+                <div class="small">No correct / no failure. Just flow.</div>
+              </div>
+              <div class="hint">
+                <b>UI方針：</b>説明最小。<br/>
+                右上の状態だけ見せる／音と光で理解させる。<br/>
+                <span class="mono">motionEnergy</span> が上がるほど “音の層” を追加する（スコアではなく変化）。
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="card" style="box-shadow:none;">
+              <div class="cardHeader">
+                <div class="title">Session Mix (最低限)</div>
+                <div class="meta">prototype controls</div>
+              </div>
+              <div class="cardBody">
+                <div class="kv">
+                  <div class="item"><div class="k">Base groove</div><div class="v">16-beat <small>(always)</small></div></div>
+                  <div class="item"><div class="k">Motion layer</div><div class="v"><span id="aLayer">1</span> <small>layers</small></div></div>
+                  <div class="item"><div class="k">Intensity</div><div class="v"><span id="aInt">0.42</span></div></div>
+                  <div class="item"><div class="k">Mood</div><div class="v"><span id="aMood">Flow</span></div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">A / Right Rail (裏側は見せるが軽く)</div>
+            <div class="meta">技術検討支援</div>
+          </div>
+          <div class="cardBody">
+            <div class="list">
+              <div class="row">
+                <div class="badge">1</div>
+                <div class="txt">
+                  <div class="h">入力ソース選択（Auto）</div>
+                  <div class="p">RGB/ToF が両方ある場合は融合。ToFのみでも “動き量” と “距離” を推定して成立。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">2</div>
+                <div class="txt">
+                  <div class="h">キャリブレーションは3秒</div>
+                  <div class="p">「立つ→腕を軽く開く」で骨格スケール推定。mocopi があれば自動スキップ。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">3</div>
+                <div class="txt">
+                  <div class="h">保存は“作品”</div>
+                  <div class="p">スコア無し。セッションの色・タイトル・短いリプレイだけ残す。</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="note">
+              <b>プロト実装優先度：</b><br/>
+              ①遅延（音と光の同期）→ ②破綻しない量子化 → ③変化演出（層追加）<br/>
+              UIはこの順の“状態”だけ表示できれば十分。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept B -->
+    <section class="concept" id="conceptB">
+      <div class="split">
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">B / Arcade HUD (ゲームっぽい見た目)</div>
+            <div class="meta">ただしスコア無し</div>
+          </div>
+          <div class="cardBody">
+            <div class="hudWrap">
+              <div class="stage" style="min-height:460px;">
+                <div class="pulse" aria-hidden="true"></div>
+                <div class="centerTag">
+                  <div class="big">SYNC THE VIBE</div>
+                  <div class="small">Your movement shapes the beat</div>
+                </div>
+              </div>
+
+              <div class="hud">
+                <div class="hudTop">
+                  <div class="hudBox">
+                    <span class="dot good"></span>
+                    <div>
+                      <div style="font-weight:800;">LIVE</div>
+                      <div class="mini">quantize: auto / fx: low</div>
+                    </div>
+                  </div>
+                  <div class="hudBox">
+                    <div>
+                      <div style="font-weight:800;">METER</div>
+                      <div class="meter" aria-label="energy meter"><div id="bMeter"></div></div>
+                    </div>
+                  </div>
+                  <div class="hudBox">
+                    <div>
+                      <div style="font-weight:800;">PHASE</div>
+                      <div class="mini" id="bPhase">Dawn → Flow</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hudBottom">
+                  <div class="hudBox">
+                    <button class="primary" id="bStart" style="pointer-events:auto;">START</button>
+                    <button id="bStop" style="pointer-events:auto;">STOP</button>
+                  </div>
+                  <div class="hudBox">
+                    <div>
+                      <div style="font-weight:800;">NOW PLAYING</div>
+                      <div class="mini" id="bNow">Kick / Snare / Hihat</div>
+                    </div>
+                  </div>
+                  <div class="hudBox">
+                    <div>
+                      <div style="font-weight:800;">HINT</div>
+                      <div class="mini">bigger moves → new layers</div>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- /hud -->
+            </div><!-- /hudWrap -->
+
+            <div style="height:12px"></div>
+
+            <div class="note">
+              <b>狙い：</b>“ゲームっぽい没入”を作りつつ、評価・勝敗・スコアを排除。<br/>
+              VC体験では「観てる人にも分かる」HUDが強いです（何が起きてるか一瞬で伝わる）。
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">B / Tech Panel (右側で検討しやすく)</div>
+            <div class="meta">センサー切替・閾値</div>
+          </div>
+          <div class="cardBody">
+            <div class="list">
+              <div class="row">
+                <div class="badge">S</div>
+                <div class="txt">
+                  <div class="h">Sensor Mix</div>
+                  <div class="p">RGB: pose / ToF: distance+motion / mocopi: full body. “auto”で選択し、UIは隠蔽。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">T</div>
+                <div class="txt">
+                  <div class="h">Thresholds (仮)</div>
+                  <div class="p"><span class="mono">energyLow</span> / <span class="mono">energyHigh</span> で層追加。上手さではなく“動き量”。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">L</div>
+                <div class="txt">
+                  <div class="h">Latency Watch</div>
+                  <div class="p">ここが崩れると“楽しい”が消えるので、UIで常時監視（赤になったら自動で演出を落とす）。</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="note">
+              <b>実装メモ：</b>Web Audio / Unity / native どれでもUIは同じ思想でOK。<br/>
+              このConceptは“ショーケース”向き（見映え）。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept C -->
+    <section class="concept" id="conceptC">
+      <div class="split">
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">C / Character Coach (IP前提)</div>
+            <div class="meta">評価しない相棒</div>
+          </div>
+          <div class="cardBody">
+            <div class="coach" style="margin-bottom:12px;">
+              <div class="avatar" aria-label="character placeholder"></div>
+              <div class="coachTalk">
+                <div class="say" id="cSay">「動き、音、ぜんぶ、キミのもの。」</div>
+                <div class="sub" id="cSub">
+                  失敗はないよ。今日は “Flow” でいこう。<br/>
+                  大きく動くと、音の層が増えるよ。
+                </div>
+              </div>
+            </div>
+
+            <div class="toolbar">
+              <div class="left">
+                <button class="primary" id="cStart">START</button>
+                <button id="cStop">STOP</button>
+                <button class="ghost" id="cToggleVoice">VOICE: OFF</button>
+              </div>
+              <div class="right">
+                <div class="pill"><span class="dot good"></span> Companion Mode <span class="mono">ON</span></div>
+                <div class="pill"><span class="dot warn"></span> Explanation <span class="mono">MIN</span></div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="stage" style="min-height:420px;">
+              <div class="pulse" aria-hidden="true"></div>
+              <div class="centerTag">
+                <div class="big">Play with your buddy.</div>
+                <div class="small">The buddy reacts, never judges.</div>
+              </div>
+              <div class="hint">
+                <b>IP向けUI：</b>キャラの反応だけが“フィードバック”。<br/>
+                「上手い/下手」を言わない。代わりに「今の音、いいね」だけ。
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="card" style="box-shadow:none;">
+              <div class="cardHeader">
+                <div class="title">After Session (作品として残す)</div>
+                <div class="meta">share / save (optional)</div>
+              </div>
+              <div class="cardBody">
+                <div class="kv">
+                  <div class="item"><div class="k">Title</div><div class="v" id="cTitle">Green Drift</div></div>
+                  <div class="item"><div class="k">Palette</div><div class="v" id="cPal">#7CFF72 / #7CF7FF</div></div>
+                  <div class="item"><div class="k">Clip</div><div class="v">10s <small>(auto)</small></div></div>
+                  <div class="item"><div class="k">Export</div><div class="v">PNG / MP4 <small>(later)</small></div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">C / IP & Tech Notes</div>
+            <div class="meta">2ヶ月プロトに最適</div>
+          </div>
+          <div class="cardBody">
+            <div class="list">
+              <div class="row">
+                <div class="badge">IP</div>
+                <div class="txt">
+                  <div class="h">キャラは“UIそのもの”</div>
+                  <div class="p">HUDよりキャラの一言・リアクションで次の行動を誘導。説明文を減らせます。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">No</div>
+                <div class="txt">
+                  <div class="h">ランキング/精度/スコアは入れない</div>
+                  <div class="p">ユーザー体験が“比較”になるとIPが弱くなり、機能プロダクトに見えます。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">HW</div>
+                <div class="txt">
+                  <div class="h">mocopiは“上位互換入力”</div>
+                  <div class="p">基本は非装着。mocopiがある時だけ「もっと繊細な音が出る」方向で差別化。</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+            <div class="note">
+              <b>このConceptの強み：</b>VCに「IPの核（キャラ）がある」と一瞬で伝わる。<br/>
+              体験後の“作品カード”が、そのままピッチ素材になります。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept D -->
+    <section class="concept" id="conceptD">
+      <div class="kiosk">
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">D / Pitch Console (体験の導線)</div>
+            <div class="meta">展示・VC向け</div>
+          </div>
+          <div class="cardBody">
+            <div class="note" style="margin-bottom:12px;">
+              <b>狙い：</b>「3分体験→作品が残る→持ち帰れる」を最短導線で。<br/>
+              説明は最小。スタッフ（あなた）が横で“1行だけ”補足する前提。
+            </div>
+
+            <button class="bigBtn" id="dStart">TAP TO START (3 MIN EXPERIENCE)</button>
+            <div style="height:12px;"></div>
+
+            <div class="pillRow">
+              <div class="pill"><span class="dot good"></span> Demo script <span class="mono">READY</span></div>
+              <div class="pill"><span class="dot warn"></span> Lighting <span class="mono">AUTO</span></div>
+              <div class="pill"><span class="dot warn"></span> Speaker <span class="mono">MED</span></div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="list">
+              <div class="row">
+                <div class="badge">1</div>
+                <div class="txt">
+                  <div class="h">Calibration (optional)</div>
+                  <div class="p">ToFで距離だけ掴めればスキップ可。mocopiなら即開始。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">2</div>
+                <div class="txt">
+                  <div class="h">Experience (3 min)</div>
+                  <div class="p">30秒ごとに層が増える。最後に“盛り上がり”が来る設計。</div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="badge">3</div>
+                <div class="txt">
+                  <div class="h">Takeaway</div>
+                  <div class="p">作品カード生成 → QRで受け取り（後で実装）。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div class="title">D / Main Screen (観客にも分かる)</div>
+            <div class="meta">big visuals + simple status</div>
+          </div>
+          <div class="cardBody">
+            <div class="stage" style="min-height:520px;">
+              <div class="pulse" aria-hidden="true"></div>
+              <div class="centerTag">
+                <div class="big">YOU ARE THE SOUND</div>
+                <div class="small">A 3-minute living music piece</div>
+              </div>
+              <div class="hint">
+                観客向け：<b>「動く→音が増える」</b>だけ伝わればOK。<br/>
+                VC向け：最後に“作品カード”が出ることで、IP/UGCの筋が立つ。
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="qr">
+              <b>QR受け取り（ダミー枠）</b><br/>
+              セッション終了時に <code>sessionId</code> を発行 → QR生成（サーバ or ローカル）。<br/>
+              例：<code>bs://session/2025-12-19T01:23:45Z</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="note">
+      このHTMLは<strong>UI構成</strong>だけに寄せています（音・センサー処理は未実装）。<br/>
+      つなぎ込みは <span class="mono">window.onSensorFrame(frame)</span>（下のJS参照）にRGB/ToF/mocopiの推定結果を流し込む想定です。
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ===========
+  // UI Switcher
+  // ===========
+  const select = document.getElementById("conceptSelect");
+  const concepts = {
+    A: document.getElementById("conceptA"),
+    B: document.getElementById("conceptB"),
+    C: document.getElementById("conceptC"),
+    D: document.getElementById("conceptD"),
+  };
+  select.addEventListener("change", () => {
+    Object.values(concepts).forEach(el => el.classList.remove("active"));
+    concepts[select.value].classList.add("active");
+  });
+
+  // ======================
+  // Dummy "sensor" state UI
+  // ======================
+  const timeMeta = document.getElementById("timeMeta");
+  const dotRGB = document.getElementById("dotRGB");
+  const dotToF = document.getElementById("dotToF");
+  const dotSp  = document.getElementById("dotSp");
+  const dotMo  = document.getElementById("dotMo");
+  const rgbText = document.getElementById("rgbText");
+  const tofText = document.getElementById("tofText");
+  const spText  = document.getElementById("spText");
+  const moText  = document.getElementById("moText");
+
+  const latencyEl = document.getElementById("latency");
+  const confEl    = document.getElementById("conf");
+  const modeEl    = document.getElementById("mode");
+  const timerEl   = document.getElementById("timer");
+
+  const aLayer = document.getElementById("aLayer");
+  const aInt   = document.getElementById("aInt");
+  const aMood  = document.getElementById("aMood");
+
+  const bMeter = document.getElementById("bMeter");
+  const bPhase = document.getElementById("bPhase");
+  const bNow   = document.getElementById("bNow");
+
+  const cSay   = document.getElementById("cSay");
+  const cSub   = document.getElementById("cSub");
+  const cTitle = document.getElementById("cTitle");
+  const cPal   = document.getElementById("cPal");
+
+  let running = false;
+  let sec = 0;
+  let tickInterval = null;
+
+  function setDot(dot, status){
+    dot.classList.remove("good","warn","bad");
+    if(status === "good") dot.classList.add("good");
+    else if(status === "warn") dot.classList.add("warn");
+    else if(status === "bad") dot.classList.add("bad");
+  }
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  function setTimer(){
+    const mm = Math.floor(sec/60);
+    const ss = sec % 60;
+    timerEl.textContent = `${pad2(mm)}:${pad2(ss)}`;
+  }
+
+  function randomChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  // This is the hook you'd call from your real pipeline:
+  // frame example:
+  // { rgb:true, tof:true, spresense:true, mocopi:false, latencyMs:18, confidence:82, motionEnergy:0.53 }
+  window.onSensorFrame = function(frame){
+    // Status
+    frame.rgb ? (setDot(dotRGB,"good"), rgbText.textContent="CONNECTED") : (setDot(dotRGB,"bad"), rgbText.textContent="DISCONNECTED");
+    frame.tof ? (setDot(dotToF,"good"), tofText.textContent="CONNECTED") : (setDot(dotToF,"bad"), tofText.textContent="DISCONNECTED");
+    frame.spresense ? (setDot(dotSp,"good"), spText.textContent="CONNECTED") : (setDot(dotSp,"warn"), spText.textContent="OPTIONAL");
+    frame.mocopi ? (setDot(dotMo,"good"), moText.textContent="ON") : (setDot(dotMo,"warn"), moText.textContent="OFF");
+
+    latencyEl.textContent = frame.latencyMs?.toFixed?.(0) ?? "—";
+    confEl.textContent = frame.confidence?.toFixed?.(0) ?? "—";
+
+    // Auto mode suggestion based on available sensors
+    let mode = "RGB";
+    if(frame.tof && frame.rgb) mode = "RGB + ToF Fusion";
+    else if(frame.tof && !frame.rgb) mode = "ToF Motion";
+    if(frame.mocopi) mode = "mocopi Full-body";
+    modeEl.textContent = mode;
+
+    // Map motionEnergy to UI-only values (no scoring, just “layers/phase”)
+    const e = Math.max(0, Math.min(1, frame.motionEnergy ?? 0));
+    aInt.textContent = e.toFixed(2);
+
+    // Layers (1..5)
+    const layers = 1 + Math.floor(e * 4.99);
+    aLayer.textContent = String(layers);
+
+    const moods = ["Dawn","Flow","Groove","Surge","Drift"];
+    aMood.textContent = moods[Math.min(moods.length-1, Math.floor(e*moods.length))];
+
+    // HUD meter
+    bMeter.style.width = `${Math.round(e*100)}%`;
+    const phaseText = `${moods[Math.min(1, Math.floor(e*moods.length))]} → ${moods[Math.min(moods.length-1, Math.floor(e*moods.length)+1)]}`;
+    bPhase.textContent = phaseText;
+
+    const nowPool = [
+      "Kick / Snare / Hihat",
+      "Sub / Clap / Shaker",
+      "Bass / Perc / FX",
+      "Chord / Pluck / Noise",
+      "Lead / Fill / Rise"
+    ];
+    bNow.textContent = nowPool[Math.min(nowPool.length-1, layers-1)];
+
+    // Character coach reactions (never judging)
+    const sayPool = [
+      "「今の音、すき。」",
+      "「いいね、そのまま。」",
+      "「動きが増えると、世界が広がるよ。」",
+      "「今日の音は今日だけ。」",
+      "「止まってもOK。音は続くよ。」"
+    ];
+    const subPool = [
+      "大きく動くと、音の層が増えるよ。",
+      "雑でも成立するように、音が合わせにいくよ。",
+      "深度が取れると、距離で音が変えられるよ。",
+      "mocopiがあると、細かい手足のニュアンスも拾えるよ。"
+    ];
+    if(running && Math.random() < 0.22){
+      cSay.textContent = randomChoice(sayPool);
+      cSub.textContent = randomChoice(subPool);
+      cTitle.textContent = `${randomChoice(["Green","Neon","Soft","Bright","Calm"])} ${randomChoice(["Drift","Flow","Groove","Pulse","Bloom"])}`;
+      cPal.textContent = `#7CFF72 / ${randomChoice(["#7CF7FF","#B9FF7A","#7AFFC8","#7AA7FF"])}`;
+    }
+
+    // time
+    timeMeta.textContent = new Date().toLocaleString();
+  };
+
+  function startSession(){
+    if(running) return;
+    running = true;
+    sec = 0;
+    setTimer();
+    tickInterval = setInterval(() => {
+      sec++;
+      setTimer();
+      // feed dummy frames while running
+      simulateTick();
+    }, 1000);
+  }
+  function stopSession(){
+    running = false;
+    if(tickInterval) clearInterval(tickInterval);
+    tickInterval = null;
+  }
+
+  function simulateTick(){
+    // Dummy toggles (pretend we can connect/disconnect devices)
+    const rgb = Math.random() > 0.10;         // mostly on
+    const tof = Math.random() > 0.15;         // mostly on
+    const sp  = Math.random() > 0.35;         // optional
+    const mo  = Math.random() > 0.78;         // rare on
+    const latencyMs = 12 + Math.random()*18;  // 12..30
+    const confidence = 55 + Math.random()*40; // 55..95
+    // motion energy slightly tied to time when running
+    const base = running ? (0.25 + 0.55*(Math.sin(sec/4)+1)/2) : 0.15;
+    const motionEnergy = Math.max(0, Math.min(1, base + (Math.random()*0.22-0.11)));
+
+    window.onSensorFrame({ rgb, tof, spresense: sp, mocopi: mo, latencyMs, confidence, motionEnergy });
+  }
+
+  function resetAll(){
+    stopSession();
+    sec = 0;
+    setTimer();
+    window.onSensorFrame({ rgb:false, tof:false, spresense:false, mocopi:false, latencyMs:null, confidence:null, motionEnergy:0 });
+  }
+
+  // Bind buttons
+  document.getElementById("btnSim").addEventListener("click", simulateTick);
+  document.getElementById("btnReset").addEventListener("click", resetAll);
+
+  // A controls
+  document.getElementById("aStart").addEventListener("click", startSession);
+  document.getElementById("aStop").addEventListener("click", stopSession);
+  document.getElementById("aCalib").addEventListener("click", () => alert("CALIBRATE (dummy)\n3秒の簡易キャリブレーション想定"));
+
+  // B controls
+  document.getElementById("bStart").addEventListener("click", startSession);
+  document.getElementById("bStop").addEventListener("click", stopSession);
+
+  // C controls
+  document.getElementById("cStart").addEventListener("click", startSession);
+  document.getElementById("cStop").addEventListener("click", stopSession);
+  const cToggleVoice = document.getElementById("cToggleVoice");
+  let voiceOn = false;
+  cToggleVoice.addEventListener("click", () => {
+    voiceOn = !voiceOn;
+    cToggleVoice.textContent = `VOICE: ${voiceOn ? "ON" : "OFF"}`;
+  });
+
+  // D controls
+  document.getElementById("dStart").addEventListener("click", startSession);
+
+  // Init
+  resetAll();
+</script>
+</body>
+</html>
